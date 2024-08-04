@@ -1,0 +1,97 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+  }
+  
+  .signup-container {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .signup-box {
+    background-color: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    text-align: center;
+    position: relative;
+  }
+  
+  .signup-box h2 {
+    margin: 0;
+    font-size: 24px;
+    color: #007bff;
+  }
+  
+  .signup-box p {
+    margin: 5px 0 20px 0;
+    color: #666;
+  }
+  
+  .input-field, .select-field {
+    display: block;
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+  }
+  
+  .signup-button {
+    width: calc(100% - 20px);
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+  }
+  
+  .social-signup {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+  }
+  
+  .social-button {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+  }
+  
+  .facebook {
+    background-color: #3b5998;
+    color: white;
+  }
+  
+  .google {
+    background-color: #db4437;
+    color: white;
+  }
+  
+  .login-link {
+    color: green;
+    text-decoration: none;
+  }
+  
+  .logo-image {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 60px;
+    height: auto;
+  }
+  
