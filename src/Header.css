@@ -1,0 +1,40 @@
+.header {
+  width: 99%;
+  background-color: #8dc2fa;
+  padding: 5px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-nav {
+  display: flex;
+  justify-content: flex-start;
+  flex-grow: 1;
+}
+
+.header-nav a {
+  color: white;
+  text-decoration: none;
+  margin-right: 15px;
+  font-weight: bold;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.header-nav a:hover {
+  text-decoration: underline;
+}
+
+.header-logo-container {
+  flex-shrink: 0; /* Prevents the logo from shrinking */
+  display: flex;
+  justify-content: flex-end;
+  width: 40px; /* Ensure the logo container stays fixed */
+}
+
+.header-logo-container img {
+  width: 100%; /* Make sure the image uses the full width of the container */
+  height: auto;
+}

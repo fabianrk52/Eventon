@@ -45,7 +45,7 @@ const Login = () => {
         <p>Not a member yet? <Link to="/signup" className="signup-link">Sign up</Link></p>
       </div>
       <div className="welcome-box">
-        <img src="/logo.png" alt="Eventon Logo" className="logo-image" />
+        <img src="/logo.png" alt="Eventon Logo" className="logo-image-login" />
         <p>Where vision meets execution,</p>
         <p>Your event planning partner.</p>
         <div className="logo">Eventon</div>

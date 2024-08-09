@@ -96,7 +96,6 @@ const Signup = () => {
         </div>
         <p>Already have an account? <Link to="/" className="login-link">Login</Link></p>
       </div>
-      <img src="/logo.png" alt="Eventon Logo" className="logo-image" />
     </div>
   );
 };
