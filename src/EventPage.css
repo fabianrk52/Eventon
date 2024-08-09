@@ -1,0 +1,175 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #e0f2ff; /* Lighter version of #8dc2fa */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+.event-page-container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+.event-menu {
+    width: 200px;
+    background-color: #8dc2fa; /* Main color */
+    color: white;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.event-menu h3 {
+    margin-top: 0;
+}
+
+.event-menu ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.event-menu ul li {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.event-menu ul li:hover {
+    background-color: #6ea7e0; /* Darker version of main color */
+}
+
+.add-event-button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #6ea7e0; /* Adjusted to match the new color scheme */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-event-button:hover {
+    background-color: #5d90c9; /* Darker hover color */
+}
+
+.event-details {
+    flex-grow: 1;
+    padding: 40px;
+    text-align: center;
+    background-color: white;
+    border-radius: 8px;
+    margin: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.event-details h1 {
+    margin-top: 0;
+    font-size: 32px;
+    color: #8dc2fa; /* Main color */
+}
+
+.event-subtitle {
+    font-size: 18px;
+    color: #333;
+    margin-top: 10px;
+}
+
+.accordion {
+    text-align: left;
+    margin-top: 20px;
+}
+
+.accordion-section {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+}
+
+.accordion-header {
+    padding: 15px;
+    background-color: #8dc2fa; /* Main color */
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.accordion-header:hover {
+    background-color: #6ea7e0; /* Darker version of main color */
+}
+
+.accordion-content {
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+}
+
+.accordion-content button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #8dc2fa; /* Main color */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.accordion-content button:hover {
+    background-color: #6ea7e0; /* Darker version of main color */
+}
+
+.delete-event-button {
+    padding: 12px 20px;
+    margin-top: 30px;
+    background-color: #c82333;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.delete-event-button:hover {
+    background-color: #a71d2a;
+}
+
+.cancel-edit-button {
+    padding: 12px 20px;
+    margin-top: 10px; /* Separate the cancel button with some space */
+    background-color: #ffc107; /* Yellow color for the cancel button */
+    color: black;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.cancel-edit-button:hover {
+    background-color: #e0a800; /* Darker yellow on hover */
+}
+
+.guests-table, .tasks-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.guests-table th, .guests-table td,
+.tasks-table th, .tasks-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.guests-table th, .tasks-table th {
+    background-color: #8dc2fa; /* Main color */
+    color: white;
+}
+
+.guests-table tr:hover, .tasks-table tr:hover {
+    background-color: #f1f1f1;
+}

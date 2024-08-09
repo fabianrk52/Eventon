@@ -25,7 +25,7 @@ body {
   .signup-box h2 {
     margin: 0;
     font-size: 24px;
-    color: #007bff;
+    color: #8dc2fa;
   }
   
   .signup-box p {
@@ -48,7 +48,7 @@ body {
   .signup-button {
     width: calc(100% - 20px);
     padding: 10px;
-    background-color: #007bff;
+    background-color: #8dc2fa;
     color: white;
     border: none;
     border-radius: 4px;

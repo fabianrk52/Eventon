@@ -5,6 +5,7 @@ import Signup from './Signup';
 import UserProfile from './UserProfile';
 import PublicProfile from './PublicProfile';
 import Header from './Header';
+import EventPage from './EventPage';
 
 const App = () => {
   const mockUser = {
@@ -24,7 +25,7 @@ const App = () => {
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/user/:id" element={<PublicProfile user={mockUser} />} />
         <Route path="/" element={<Login />} />
-        <Route path="/events" element={<div>Events Page</div>} />
+        <Route path="/events" element={<EventPage/>} />
         <Route path="/signin" element={<Login />} />
       </Routes>
     </Router>
