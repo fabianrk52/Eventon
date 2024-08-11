@@ -48,8 +48,12 @@ body {
     display: block;
     text-align: center;
     margin-top: 10px;
-    color: #007bff;
+    color: black;
     text-decoration: none;
+    background-color: #8dc2fa;
+    border-color: #8dc2fa;
+    box-sizing: border-box;
+    border-radius: 4px;
   }
   
   .social-login {
