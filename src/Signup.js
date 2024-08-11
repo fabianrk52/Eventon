@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import './Signup.css';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import Cookies from 'js-cookie';
+
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -24,12 +26,31 @@ const Signup = () => {
 
   const handleSignup = async () => {
     try {
-      const response = await axios.post('/api/signup', { formData });
-      setMessage(response.data.message);
+      const response = await axios.post('/api/login', { formData});
+      if (response.status === 200) {
+        const token = response.data.token;
+
+        // Store the token in a cookie
+        Cookies.set('userToken', token, { expires: 7 });
+
+        // Redirect to the 2FA page
+        window.location.href = '/signup-2fa';
+      } else {
+        setMessage('Invalid login credentials.');
+      }
     } catch (error) {
       setMessage('Login failed. Please check your credentials.');
     }
   };
+
+  // const handleSignup = async () => {
+  //   try {
+  //     const response = await axios.post('/api/signup', { formData });
+  //     setMessage(response.data.message);
+  //   } catch (error) {
+  //     setMessage('Login failed. Please check your credentials.');
+  //   }
+  // };
 
   return (
     <div className="signup-container">

@@ -16,10 +16,10 @@ const Login = () => {
         const token = response.data.token;
 
         // Store the token in a cookie
-        Cookies.set('userToken', token, { expires: 7 }); // Expires in 7 days
+        Cookies.set('userToken', token, { expires: 7 });
 
-        // Redirect to the events page or another protected route
-        window.location.href = '/events';
+        // Redirect to the 2FA page
+        window.location.href = '/login-2fa';
       } else {
         setMessage('Invalid login credentials.');
       }

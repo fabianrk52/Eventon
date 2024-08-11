@@ -39,7 +39,7 @@ const EventPage = () => {
           console.error('Failed to fetch events:', error);
         }
       } else {
-        window.location.href = '/signin'; // Redirect to sign-in if no token is found
+        window.location.href = '/login'; // Redirect to sign-in if no token is found
       }
     };
 
