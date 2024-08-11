@@ -5,19 +5,22 @@ body {
   background-color: #f0f4f8;
 }
 
-.user-profile-container {
-  max-width: 800px;
+.public-profile-container {
+  max-width: 100vh;
   margin: 0 auto;
   padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .cover-photo-container {
   width: 100%;
-  height: 300px;
+  height: 30vh;
   background-color: #ddd;
   overflow: hidden;
   border-radius: 8px 8px 0 0;
-  position: relative; /* Added to position profile photo relative to this container */
+  position: relative;
 }
 
 .cover-photo {
@@ -28,17 +31,15 @@ body {
 
 .profile-photo-container {
   position: relative;
-  bottom: 50px;
+  bottom: 10vh;
   left: 50%;
   transform: translateX(-50%);
   width: 120px;
   height: 120px;
   border-radius: 50%;
   overflow: hidden;
-  border: 4px solid white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  border: 5px solid white;
+  background-color: white;
 }
 
 .profile-photo {
@@ -49,16 +50,31 @@ body {
 
 .personal-info-container {
   text-align: center;
-  margin-top: -30px;
 }
 
 .personal-info-container h2 {
   margin-top: 10px;
   margin-bottom: 10px;
+  font-size: 24px;
+  color: #333;
 }
 
 .personal-info-container p {
   margin: 5px 0;
+  font-size: 16px;
+  color: #555;
+}
+
+.edit-profile-icon {
+  font-size: 24px;
+  color: black;
+  cursor: pointer;
+  position: relative;
+  top: 1vh;
+}
+
+.edit-profile-icon:hover {
+  color: #7bb0e0;
 }
 
 .free-text-container {
@@ -67,6 +83,8 @@ body {
 
 .free-text-container h3 {
   margin-bottom: 10px;
+  font-size: 18px;
+  color: #333;
 }
 
 .free-text {
