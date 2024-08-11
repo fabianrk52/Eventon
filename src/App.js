@@ -22,7 +22,8 @@ const App = () => {
         <Route path="/profile:id" element={token ? <PublicProfile/> : <Login />} /> {/* Public Profile Route */}
         <Route path="/edit-profile" element={token ? <EditProfile /> : <Login />} /> {/* Edit Profile Route */}
         <Route path="/" element={token ? <EventPage /> : <Login />} />
-        <Route path="/events" element={token ? <EventPage /> : <Login />} />
+        <Route path="/login" element={token ? <EventPage /> : <Login />} />
+        <Route path="/events" element={<EventPage/>} />
         <Route path="/signin" element={<Login />} />
         <Route path="/login-2fa" element={token ? <LoginTwoFactorAuth /> : <Login/>} />  {/* 2FA Route */}
       </Routes>
