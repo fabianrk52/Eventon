@@ -110,12 +110,24 @@ body, html {
 .accordion-content button {
     margin-top: 10px;
     padding: 8px 12px;
-    background-color: #8dc2fa; /* Main color */
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
+}
+
+.cancel{
+    margin-left: 10px;
+    background-color: red; /* Main color */
+}
+
+.save {
+    background-color: green; /* Main color */
+}
+
+.edit{
+    background-color: #6ea7e0; /* Darker version of main color */
 }
 
 .accordion-content button:hover {

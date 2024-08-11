@@ -6,7 +6,24 @@ import { useParams , useNavigate } from 'react-router-dom';
 
 const EventPage = () => {
   const { id } = useParams();
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState([
+    {
+      id: 1, // Example ID for events
+      title: 'Event 1',
+      date: '2024-08-15',
+      location: 'New York, NY',
+      description: 'This is the description for Event 1.',
+      guests: [
+        { name: 'John', surname: 'Doe', phone: '123-456-7890', confirmation: 'Confirmed' },
+        { name: 'Jane', surname: 'Smith', phone: '098-765-4321', confirmation: 'Pending' }
+      ],
+      tasks: [
+        { title: 'Setup Venue', openedBy: 'Alice', lastUpdate: '2024-08-10', status: 'In Progress' },
+        { title: 'Send Invitations', openedBy: 'Bob', lastUpdate: '2024-08-08', status: 'Completed' }
+      ],
+    },
+    // Other initial events...
+  ]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [activeSections, setActiveSections] = useState({
     details: false,
@@ -25,34 +42,34 @@ const EventPage = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchEvents = async () => {
-      const token = Cookies.get('userToken'); // Retrieve the token from cookies
+  // useEffect(() => {
+  //   const fetchEvents = async () => {
+  //     const token = Cookies.get('userToken'); // Retrieve the token from cookies
 
-      if (token) {
-        try {
-          const response = await axios.get(`/api/events/${id}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+  //     if (token) {
+  //       try {
+  //         const response = await axios.get(`/api/events/${id}`, {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         });
 
-          if (response.status === 200) {
-            setLoading(false);
-            setEvents(response.data);
-            setSelectedEvent(response.data[0]); // Select the first event by default
-          }
-        } catch (error) {
-          setError('Failed to load fetch events: ', error);
-          setLoading(false);
-        }
-      } else {
-        navigate('/login');
-      }
-    };
+  //         if (response.status === 200) {
+  //           setLoading(false);
+  //           setEvents(response.data);
+  //           setSelectedEvent(response.data[0]); // Select the first event by default
+  //         }
+  //       } catch (error) {
+  //         setError('Failed to load fetch events: ', error);
+  //         setLoading(false);
+  //       }
+  //     } else {
+  //       navigate('/');
+  //     }
+  //   };
 
-    fetchEvents();
-  }, [id]);
+  //   fetchEvents();
+  // }, [id]);
 
   const handleEventSelection = (event) => {
     setSelectedEvent(event);
@@ -195,13 +212,13 @@ const EventPage = () => {
     }
   };
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+  // if (loading) {
+  //   return <p>Loading...</p>;
+  // }
 
-  if (error) {
-    return <p>{error}</p>;
-  }
+  // if (error) {
+  //   return <p>{error}</p>;
+  // }
 
   return (
     <div className="event-page-container">
@@ -238,13 +255,13 @@ const EventPage = () => {
                           rows={5}
                           placeholder="Enter event details"
                         />
-                        <button onClick={handleSaveDetails}>Save</button>
-                        <button onClick={handleCancelEditing}>Cancel</button>
+                        <button onClick={handleSaveDetails} className='save'>Save</button>
+                        <button onClick={handleCancelEditing} className='cancel'>Cancel</button>
                       </div>
                     ) : (
                       <div>
                         <p>{selectedEvent.description}</p>
-                        <button onClick={() => handleEditSection('details')}>Edit</button>
+                        <button onClick={() => handleEditSection('details')} class="edit">Edit</button>
                       </div>
                     )}
                   </div>
@@ -282,9 +299,9 @@ const EventPage = () => {
                                   </select>
                                 </td>
                                 <td>
-                                  <button onClick={handleSaveGuest}>Save</button>
-                                  <button onClick={handleCancelEditing}>Cancel</button>
-                                </td>
+                                <button onClick={handleSaveDetails} className='save'>Save</button>
+                                <button onClick={handleCancelEditing} className='cancel'>Cancel</button>
+                                  </td>
                               </>
                             ) : (
                               <>
@@ -293,7 +310,7 @@ const EventPage = () => {
                                 <td>{guest.phone}</td>
                                 <td>{guest.confirmation}</td>
                                 <td>
-                                  <button onClick={() => handleEditSection('guests', index)}>Edit</button>
+                                  <button onClick={() => handleEditSection('guests', index)} class="edit">Edit</button>
                                 </td>
                               </>
                             )}
@@ -311,14 +328,14 @@ const EventPage = () => {
                               </select>
                             </td>
                             <td>
-                              <button onClick={handleSaveGuest}>Save</button>
-                              <button onClick={handleCancelEditing}>Cancel</button>
-                            </td>
+                            <button onClick={handleSaveDetails} className='save'>Save</button>
+                            <button onClick={handleCancelEditing} className='cancel'>Cancel</button>
+                              </td>
                           </tr>
                         )}
                       </tbody>
                     </table>
-                    {!isEditing && <button onClick={() => handleAddNewRow('guests')}>Add Guest</button>}
+                    {!isEditing && <button onClick={() => handleAddNewRow('guests')} class="edit">Add Guest</button>}
                   </div>
                 )}
               </div>
@@ -354,9 +371,9 @@ const EventPage = () => {
                                   </select>
                                 </td>
                                 <td>
-                                  <button onClick={handleSaveTask}>Save</button>
-                                  <button onClick={handleCancelEditing}>Cancel</button>
-                                </td>
+                                <button onClick={handleSaveDetails} className='save'>Save</button>
+                                <button onClick={handleCancelEditing} className='cancel'>Cancel</button>
+                                  </td>
                               </>
                             ) : (
                               <>
@@ -365,7 +382,7 @@ const EventPage = () => {
                                 <td>{task.lastUpdate}</td>
                                 <td>{task.status}</td>
                                 <td>
-                                  <button onClick={() => handleEditSection('tasks', index)}>Edit</button>
+                                  <button onClick={() => handleEditSection('tasks', index)} class="edit">Edit</button>
                                 </td>
                               </>
                             )}
@@ -383,14 +400,14 @@ const EventPage = () => {
                               </select>
                             </td>
                             <td>
-                              <button onClick={handleSaveTask}>Save</button>
-                              <button onClick={handleCancelEditing}>Cancel</button>
-                            </td>
+                            <button onClick={handleSaveDetails} className='save'>Save</button>
+                            <button onClick={handleCancelEditing} className='cancel'>Cancel</button>
+                              </td>
                           </tr>
                         )}
                       </tbody>
                     </table>
-                    {!isEditing && <button onClick={() => handleAddNewRow('tasks')}>Add Task</button>}
+                    {!isEditing && <button onClick={() => handleAddNewRow('tasks')} class="edit">Add Task</button>}
                   </div>
                 )}
               </div>
