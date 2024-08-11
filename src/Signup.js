@@ -3,6 +3,8 @@ import './Signup.css';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
+
 
 
 const Signup = () => {
@@ -15,6 +17,8 @@ const Signup = () => {
     password: '',
   });
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,7 +30,7 @@ const Signup = () => {
 
   const handleSignup = async () => {
     try {
-      const response = await axios.post('/api/login', { formData});
+      const response = await axios.post('/api/signup', { formData});
       if (response.status === 200) {
         const token = response.data.token;
 
@@ -34,7 +38,8 @@ const Signup = () => {
         Cookies.set('userToken', token, { expires: 7 });
 
         // Redirect to the 2FA page
-        window.location.href = '/signup-2fa';
+        navigate('/signup-2fa');
+
       } else {
         setMessage('Invalid login credentials.');
       }
@@ -42,15 +47,6 @@ const Signup = () => {
       setMessage('Login failed. Please check your credentials.');
     }
   };
-
-  // const handleSignup = async () => {
-  //   try {
-  //     const response = await axios.post('/api/signup', { formData });
-  //     setMessage(response.data.message);
-  //   } catch (error) {
-  //     setMessage('Login failed. Please check your credentials.');
-  //   }
-  // };
 
   return (
     <div className="signup-container">

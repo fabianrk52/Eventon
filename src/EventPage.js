@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import './EventPage.css';
+import { useParams , useNavigate } from 'react-router-dom';
 
 const EventPage = () => {
+  const { id } = useParams();
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [activeSections, setActiveSections] = useState({
@@ -19,32 +21,38 @@ const EventPage = () => {
   const [newTask, setNewTask] = useState({ title: '', openedBy: '', lastUpdate: '', status: '' });
   const [newDescription, setNewDescription] = useState('');
 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchEvents = async () => {
       const token = Cookies.get('userToken'); // Retrieve the token from cookies
 
       if (token) {
         try {
-          const response = await axios.get('https://your-api-endpoint.com/events', {
+          const response = await axios.get(`/api/events/${id}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
 
           if (response.status === 200) {
+            setLoading(false);
             setEvents(response.data);
             setSelectedEvent(response.data[0]); // Select the first event by default
           }
         } catch (error) {
-          console.error('Failed to fetch events:', error);
+          setError('Failed to load fetch events: ', error);
+          setLoading(false);
         }
       } else {
-        window.location.href = '/login'; // Redirect to sign-in if no token is found
+        navigate('/login');
       }
     };
 
     fetchEvents();
-  }, []);
+  }, [id]);
 
   const handleEventSelection = (event) => {
     setSelectedEvent(event);
@@ -186,6 +194,14 @@ const EventPage = () => {
       console.error('Error deleting the event:', error);
     }
   };
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   return (
     <div className="event-page-container">

@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import './2FA.css';
+import { useNavigate } from 'react-router-dom';
+
 
 const SignUpTwoFactorAuth = () => {
   const [code, setCode] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleVerify = async () => {
     try {
@@ -19,7 +22,7 @@ const SignUpTwoFactorAuth = () => {
       if (response.status === 201) {
         // 2FA is successful, redirect to the dashboard or events page
         setMessage("Successful Login!");
-        window.location.href = '/profile';
+        navigate('/profile');
       } else {
         setMessage('Invalid 2FA code.');
       }

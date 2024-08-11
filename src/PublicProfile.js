@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useParams , useNavigate } from 'react-router-dom';
 import './Profile.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const PublicProfile = () => {
+  const { id } = useParams();
   const [userData, setUserData] = useState({
     coverPhoto: '',
     profilePhoto: '',
@@ -20,7 +21,7 @@ const PublicProfile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get('/api/user-profile'); // Replace with your actual API endpoint
+        const response = await axios.get(`/api/user-profile/${id}`); // Replace with your actual API endpoint
         setUserData(response.data);
         setLoading(false);
       } catch (err) {
@@ -30,7 +31,7 @@ const PublicProfile = () => {
     };
 
     fetchUserData();
-  }, []);
+  }, [id]);
 
   const handleEditProfile = () => {
     navigate('/edit-profile');
