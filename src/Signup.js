@@ -119,8 +119,8 @@ const Signup = () => {
         {message && <p className="message">{message}</p>}
         <p>You can also sign up with:</p>
         <div className="social-signup">
-          <button className="social-button facebook">F</button>
-          <button className="social-button google">G</button>
+          <i class="fa-brands fa-facebook"></i>
+          <i class="fa-brands fa-google google"></i>
         </div>
         <p>Already have an account? <Link to="/" className="login-link">Login</Link></p>
       </div>

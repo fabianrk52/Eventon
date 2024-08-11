@@ -2,24 +2,25 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import './Login.css';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
       const response = await axios.post('/api/login', { email, password });
       if (response.status === 200) {
         const token = response.data.token;
-
-        // Store the token in a cookie
         Cookies.set('userToken', token, { expires: 7 });
 
-        // Redirect to the 2FA page
-        window.location.href = '/login-2fa';
+        // Redirect to the public profile page
+        navigate('/profile');
       } else {
         setMessage('Invalid login credentials.');
       }
@@ -47,20 +48,13 @@ const Login = () => {
         />
         <button className="login-button" onClick={handleLogin}>Login</button>
         {message && <p className="message">{message}</p>}
-        <a href="#" className="forgot-password">Forgot password?</a>
+        <button className="forgot-password">Forgot password?</button>
         <p>Or continue with:</p>
         <div className="social-login">
-          <button className="social-button facebook">F</button>
-          <button className="social-button google">G</button>
+          <i class="fa-brands fa-facebook"></i>
+          <i class="fa-brands fa-google google"></i>
         </div>
-        <p>Not a member yet? <Link to="/signup" className="signup-link">Sign up</Link></p>
-      </div>
-      <div className="welcome-box">
-        <img src="/logo.png" alt="Eventon Logo" className="logo-image-login" />
-        <p>Where vision meets execution,</p>
-        <p>Your event planning partner.</p>
-        <div className="logo">Eventon</div>
-        <a href="#" className="contact-link">Contact us</a>
+        <p>Not a member yet? <a href="/signup" className="signup-link">Sign up</a></p>
       </div>
     </div>
   );

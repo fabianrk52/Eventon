@@ -66,15 +66,9 @@ body {
     margin: 0 5px;
     cursor: pointer;
   }
-  
-  .facebook {
-    background-color: #3b5998;
-    color: white;
-  }
-  
+
   .google {
-    background-color: #db4437;
-    color: white;
+    margin-left: 2vh;
   }
   
   .signup-link {

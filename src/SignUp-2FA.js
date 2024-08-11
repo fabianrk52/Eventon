@@ -57,7 +57,7 @@ const SignUpTwoFactorAuth = () => {
         />
         <button className="verify-button" onClick={handleVerify}>Verify</button>
         {message && <p className="message">{message}</p>}
-        <a href="#" className="resend-link" onClick={handleResendCode}>Resend code</a>
+        <button href="#" className="resend-link" onClick={handleResendCode}>Resend code</button>
       </div>
     </div>
   );
