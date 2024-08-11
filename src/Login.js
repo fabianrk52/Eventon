@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import './Login.css';
 import { Link } from 'react-router-dom';
 
@@ -11,7 +12,17 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       const response = await axios.post('/api/login', { email, password });
-      setMessage(response.data.message);
+      if (response.status === 200) {
+        const token = response.data.token;
+
+        // Store the token in a cookie
+        Cookies.set('userToken', token, { expires: 7 }); // Expires in 7 days
+
+        // Redirect to the events page or another protected route
+        window.location.href = '/events';
+      } else {
+        setMessage('Invalid login credentials.');
+      }
     } catch (error) {
       setMessage('Login failed. Please check your credentials.');
     }

@@ -1,28 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import './EventPage.css';
 
 const EventPage = () => {
-  const [events, setEvents] = useState([
-    {
-      id: 1, // Example ID for events
-      title: 'Event 1',
-      date: '2024-08-15',
-      location: 'New York, NY',
-      description: 'This is the description for Event 1.',
-      guests: [
-        { name: 'John', surname: 'Doe', phone: '123-456-7890', confirmation: 'Confirmed' },
-        { name: 'Jane', surname: 'Smith', phone: '098-765-4321', confirmation: 'Pending' }
-      ],
-      tasks: [
-        { title: 'Setup Venue', openedBy: 'Alice', lastUpdate: '2024-08-10', status: 'In Progress' },
-        { title: 'Send Invitations', openedBy: 'Bob', lastUpdate: '2024-08-08', status: 'Completed' }
-      ],
-    },
-    // Other initial events...
-  ]);
-
-  const [selectedEvent, setSelectedEvent] = useState(events[0]);
+  const [events, setEvents] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const [activeSections, setActiveSections] = useState({
     details: false,
     guests: false,
@@ -35,6 +18,33 @@ const EventPage = () => {
   const [newGuest, setNewGuest] = useState({ name: '', surname: '', phone: '', confirmation: '' });
   const [newTask, setNewTask] = useState({ title: '', openedBy: '', lastUpdate: '', status: '' });
   const [newDescription, setNewDescription] = useState('');
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      const token = Cookies.get('userToken'); // Retrieve the token from cookies
+
+      if (token) {
+        try {
+          const response = await axios.get('https://your-api-endpoint.com/events', {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (response.status === 200) {
+            setEvents(response.data);
+            setSelectedEvent(response.data[0]); // Select the first event by default
+          }
+        } catch (error) {
+          console.error('Failed to fetch events:', error);
+        }
+      } else {
+        window.location.href = '/signin'; // Redirect to sign-in if no token is found
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
   const handleEventSelection = (event) => {
     setSelectedEvent(event);
@@ -97,7 +107,12 @@ const EventPage = () => {
       }
       const updatedEvent = { ...selectedEvent, guests: updatedGuests };
 
-      const response = await axios.put(`https://your-api-endpoint.com/events/${selectedEvent.id}`, updatedEvent);
+      const response = await axios.put(`https://your-api-endpoint.com/events/${selectedEvent.id}`, updatedEvent, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('userToken')}`, // Use token from cookies
+        },
+      });
+
       if (response.status === 200) {
         setEvents(events.map(event => event.id === selectedEvent.id ? updatedEvent : event));
         setSelectedEvent(updatedEvent);
@@ -112,7 +127,12 @@ const EventPage = () => {
     try {
       const updatedEvent = { ...selectedEvent, description: newDescription };
       
-      const response = await axios.put(`https://your-api-endpoint.com/events/${selectedEvent.id}`, updatedEvent);
+      const response = await axios.put(`https://your-api-endpoint.com/events/${selectedEvent.id}`, updatedEvent, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('userToken')}`, // Use token from cookies
+        },
+      });
+
       if (response.status === 200) {
         setEvents(events.map(event => event.id === selectedEvent.id ? updatedEvent : event));
         setSelectedEvent(updatedEvent);
@@ -134,7 +154,12 @@ const EventPage = () => {
       }
       const updatedEvent = { ...selectedEvent, tasks: updatedTasks };
 
-      const response = await axios.put(`https://your-api-endpoint.com/events/${selectedEvent.id}`, updatedEvent);
+      const response = await axios.put(`https://your-api-endpoint.com/events/${selectedEvent.id}`, updatedEvent, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('userToken')}`, // Use token from cookies
+        },
+      });
+
       if (response.status === 200) {
         setEvents(events.map(event => event.id === selectedEvent.id ? updatedEvent : event));
         setSelectedEvent(updatedEvent);
@@ -145,29 +170,14 @@ const EventPage = () => {
     }
   };
 
-  const handleChangeDescription = (e) => {
-    setNewDescription(e.target.value);
-  };
-
-  const handleChangeGuest = (e) => {
-    const { name, value } = e.target;
-    setNewGuest(prevState => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  const handleChangeTask = (e) => {
-    const { name, value } = e.target;
-    setNewTask(prevState => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
   const handleDeleteEvent = async () => {
     try {
-      const response = await axios.delete(`https://your-api-endpoint.com/events/${selectedEvent.id}`);
+      const response = await axios.delete(`https://your-api-endpoint.com/events/${selectedEvent.id}`, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('userToken')}`, // Use token from cookies
+        },
+      });
+
       if (response.status === 200) {
         setEvents(events.filter(event => event.id !== selectedEvent.id));
         setSelectedEvent(events[0] || null); // Select the first event or null if none are left
@@ -191,64 +201,95 @@ const EventPage = () => {
         <button className="add-event-button" onClick={() => handleEditSection('title')}>Add Event</button>
       </div>
       <div className="event-details">
-        <h1>{selectedEvent.title}</h1>
-        <p className="event-subtitle">
-          <strong>Date:</strong> {selectedEvent.date} | <strong>Location:</strong> {selectedEvent.location}
-        </p>
-        <div className="accordion">
-          <div className="accordion-section">
-            <div className="accordion-header" onClick={() => toggleSection('details')}>
-              Details
-            </div>
-            {activeSections.details && (
-              <div className="accordion-content">
-                {isEditing && editingSection === 'details' ? (
-                  <div>
-                    <textarea
-                      value={newDescription}
-                      onChange={handleChangeDescription}
-                      rows={5}
-                      placeholder="Enter event details"
-                    />
-                    <button onClick={handleSaveDetails}>Save</button>
-                    <button onClick={handleCancelEditing}>Cancel</button>
-                  </div>
-                ) : (
-                  <div>
-                    <p>{selectedEvent.description}</p>
-                    <button onClick={() => handleEditSection('details')}>Edit</button>
+        {selectedEvent && (
+          <>
+            <h1>{selectedEvent.title}</h1>
+            <p className="event-subtitle">
+              <strong>Date:</strong> {selectedEvent.date} | <strong>Location:</strong> {selectedEvent.location}
+            </p>
+            <div className="accordion">
+              <div className="accordion-section">
+                <div className="accordion-header" onClick={() => toggleSection('details')}>
+                  Details
+                </div>
+                {activeSections.details && (
+                  <div className="accordion-content">
+                    {isEditing && editingSection === 'details' ? (
+                      <div>
+                        <textarea
+                          value={newDescription}
+                          onChange={(e) => setNewDescription(e.target.value)}
+                          rows={5}
+                          placeholder="Enter event details"
+                        />
+                        <button onClick={handleSaveDetails}>Save</button>
+                        <button onClick={handleCancelEditing}>Cancel</button>
+                      </div>
+                    ) : (
+                      <div>
+                        <p>{selectedEvent.description}</p>
+                        <button onClick={() => handleEditSection('details')}>Edit</button>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
-            )}
-          </div>
-          <div className="accordion-section">
-            <div className="accordion-header" onClick={() => toggleSection('guests')}>
-              Guests
-            </div>
-            {activeSections.guests && (
-              <div className="accordion-content">
-                <h3>Guests List</h3>
-                <table className="guests-table">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Surname</th>
-                      <th>Phone</th>
-                      <th>Confirmation</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {selectedEvent.guests.map((guest, index) => (
-                      <tr key={index}>
-                        {isEditing && editingSection === 'guests' && editingIndex === index ? (
-                          <>
-                            <td><input type="text" name="name" value={newGuest.name} onChange={handleChangeGuest} placeholder="Name" /></td>
-                            <td><input type="text" name="surname" value={newGuest.surname} onChange={handleChangeGuest} placeholder="Surname" /></td>
-                            <td><input type="text" name="phone" value={newGuest.phone} onChange={handleChangeGuest} placeholder="Phone" /></td>
+              <div className="accordion-section">
+                <div className="accordion-header" onClick={() => toggleSection('guests')}>
+                  Guests
+                </div>
+                {activeSections.guests && (
+                  <div className="accordion-content">
+                    <h3>Guests List</h3>
+                    <table className="guests-table">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Surname</th>
+                          <th>Phone</th>
+                          <th>Confirmation</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {selectedEvent.guests.map((guest, index) => (
+                          <tr key={index}>
+                            {isEditing && editingSection === 'guests' && editingIndex === index ? (
+                              <>
+                                <td><input type="text" name="name" value={newGuest.name} onChange={(e) => setNewGuest({ ...newGuest, name: e.target.value })} placeholder="Name" /></td>
+                                <td><input type="text" name="surname" value={newGuest.surname} onChange={(e) => setNewGuest({ ...newGuest, surname: e.target.value })} placeholder="Surname" /></td>
+                                <td><input type="text" name="phone" value={newGuest.phone} onChange={(e) => setNewGuest({ ...newGuest, phone: e.target.value })} placeholder="Phone" /></td>
+                                <td>
+                                  <select name="confirmation" value={newGuest.confirmation} onChange={(e) => setNewGuest({ ...newGuest, confirmation: e.target.value })}>
+                                    <option value="Confirmed">Confirmed</option>
+                                    <option value="Pending">Pending</option>
+                                  </select>
+                                </td>
+                                <td>
+                                  <button onClick={handleSaveGuest}>Save</button>
+                                  <button onClick={handleCancelEditing}>Cancel</button>
+                                </td>
+                              </>
+                            ) : (
+                              <>
+                                <td>{guest.name}</td>
+                                <td>{guest.surname}</td>
+                                <td>{guest.phone}</td>
+                                <td>{guest.confirmation}</td>
+                                <td>
+                                  <button onClick={() => handleEditSection('guests', index)}>Edit</button>
+                                </td>
+                              </>
+                            )}
+                          </tr>
+                        ))}
+                        {isEditing && editingSection === 'guests' && editingIndex === null && (
+                          <tr>
+                            <td><input type="text" name="name" value={newGuest.name} onChange={(e) => setNewGuest({ ...newGuest, name: e.target.value })} placeholder="Name" /></td>
+                            <td><input type="text" name="surname" value={newGuest.surname} onChange={(e) => setNewGuest({ ...newGuest, surname: e.target.value })} placeholder="Surname" /></td>
+                            <td><input type="text" name="phone" value={newGuest.phone} onChange={(e) => setNewGuest({ ...newGuest, phone: e.target.value })} placeholder="Phone" /></td>
                             <td>
-                              <select name="confirmation" value={newGuest.confirmation} onChange={handleChangeGuest}>
+                              <select name="confirmation" value={newGuest.confirmation} onChange={(e) => setNewGuest({ ...newGuest, confirmation: e.target.value })}>
                                 <option value="Confirmed">Confirmed</option>
                                 <option value="Pending">Pending</option>
                               </select>
@@ -257,117 +298,90 @@ const EventPage = () => {
                               <button onClick={handleSaveGuest}>Save</button>
                               <button onClick={handleCancelEditing}>Cancel</button>
                             </td>
-                          </>
-                        ) : (
-                          <>
-                            <td>{guest.name}</td>
-                            <td>{guest.surname}</td>
-                            <td>{guest.phone}</td>
-                            <td>{guest.confirmation}</td>
-                            <td>
-                              <button onClick={() => handleEditSection('guests', index)}>Edit</button>
-                            </td>
-                          </>
+                          </tr>
                         )}
-                      </tr>
-                    ))}
-                    {isEditing && editingSection === 'guests' && editingIndex === null && (
-                      <tr>
-                        <td><input type="text" name="name" value={newGuest.name} onChange={handleChangeGuest} placeholder="Name" /></td>
-                        <td><input type="text" name="surname" value={newGuest.surname} onChange={handleChangeGuest} placeholder="Surname" /></td>
-                        <td><input type="text" name="phone" value={newGuest.phone} onChange={handleChangeGuest} placeholder="Phone" /></td>
-                        <td>
-                          <select name="confirmation" value={newGuest.confirmation} onChange={handleChangeGuest}>
-                            <option value="Confirmed">Confirmed</option>
-                            <option value="Pending">Pending</option>
-                          </select>
-                        </td>
-                        <td>
-                          <button onClick={handleSaveGuest}>Save</button>
-                          <button className=".cancel-edit-button" onClick={handleCancelEditing}>1</button>
-                          </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-                {!isEditing && <button onClick={() => handleAddNewRow('guests')}>Add Guest</button>}
+                      </tbody>
+                    </table>
+                    {!isEditing && <button onClick={() => handleAddNewRow('guests')}>Add Guest</button>}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-          <div className="accordion-section">
-            <div className="accordion-header" onClick={() => toggleSection('tasks')}>
-              Tasks
-            </div>
-            {activeSections.tasks && (
-              <div className="accordion-content">
-                <h3>Task List</h3>
-                <table className="tasks-table">
-                  <thead>
-                    <tr>
-                      <th>Title</th>
-                      <th>Opened By</th>
-                      <th>Last Update</th>
-                      <th>Status</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {selectedEvent.tasks.map((task, index) => (
-                      <tr key={index}>
-                        {isEditing && editingSection === 'tasks' && editingIndex === index ? (
-                          <>
-                            <td><input type="text" name="title" value={newTask.title} onChange={handleChangeTask} placeholder="Title" /></td>
-                            <td><input type="text" name="openedBy" value={newTask.openedBy} onChange={handleChangeTask} placeholder="Opened By" /></td>
-                            <td><input type="date" name="lastUpdate" value={newTask.lastUpdate} onChange={handleChangeTask} /></td>
+              <div className="accordion-section">
+                <div className="accordion-header" onClick={() => toggleSection('tasks')}>
+                  Tasks
+                </div>
+                {activeSections.tasks && (
+                  <div className="accordion-content">
+                    <h3>Task List</h3>
+                    <table className="tasks-table">
+                      <thead>
+                        <tr>
+                          <th>Title</th>
+                          <th>Opened By</th>
+                          <th>Last Update</th>
+                          <th>Status</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {selectedEvent.tasks.map((task, index) => (
+                          <tr key={index}>
+                            {isEditing && editingSection === 'tasks' && editingIndex === index ? (
+                              <>
+                                <td><input type="text" name="title" value={newTask.title} onChange={(e) => setNewTask({ ...newTask, title: e.target.value })} placeholder="Title" /></td>
+                                <td><input type="text" name="openedBy" value={newTask.openedBy} onChange={(e) => setNewTask({ ...newTask, openedBy: e.target.value })} placeholder="Opened By" /></td>
+                                <td><input type="date" name="lastUpdate" value={newTask.lastUpdate} onChange={(e) => setNewTask({ ...newTask, lastUpdate: e.target.value })} /></td>
+                                <td>
+                                  <select name="status" value={newTask.status} onChange={(e) => setNewTask({ ...newTask, status: e.target.value })}>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                  </select>
+                                </td>
+                                <td>
+                                  <button onClick={handleSaveTask}>Save</button>
+                                  <button onClick={handleCancelEditing}>Cancel</button>
+                                </td>
+                              </>
+                            ) : (
+                              <>
+                                <td>{task.title}</td>
+                                <td>{task.openedBy}</td>
+                                <td>{task.lastUpdate}</td>
+                                <td>{task.status}</td>
+                                <td>
+                                  <button onClick={() => handleEditSection('tasks', index)}>Edit</button>
+                                </td>
+                              </>
+                            )}
+                          </tr>
+                        ))}
+                        {isEditing && editingSection === 'tasks' && editingIndex === null && (
+                          <tr>
+                            <td><input type="text" name="title" value={newTask.title} onChange={(e) => setNewTask({ ...newTask, title: e.target.value })} placeholder="Title" /></td>
+                            <td><input type="text" name="openedBy" value={newTask.openedBy} onChange={(e) => setNewTask({ ...newTask, openedBy: e.target.value })} placeholder="Opened By" /></td>
+                            <td><input type="date" name="lastUpdate" value={newTask.lastUpdate} onChange={(e) => setNewTask({ ...newTask, lastUpdate: e.target.value })} /></td>
                             <td>
-                              <select name="status" value={newTask.status} onChange={handleChangeTask}>
+                              <select name="status" value={newTask.status} onChange={(e) => setNewTask({ ...newTask, status: e.target.value })}>
                                 <option value="In Progress">In Progress</option>
                                 <option value="Completed">Completed</option>
                               </select>
                             </td>
                             <td>
                               <button onClick={handleSaveTask}>Save</button>
-                              <button className=".cancel-edit-button" onClick={handleCancelEditing}>2</button>
+                              <button onClick={handleCancelEditing}>Cancel</button>
                             </td>
-                          </>
-                        ) : (
-                          <>
-                            <td>{task.title}</td>
-                            <td>{task.openedBy}</td>
-                            <td>{task.lastUpdate}</td>
-                            <td>{task.status}</td>
-                            <td>
-                              <button onClick={() => handleEditSection('tasks', index)}>Edit</button>
-                            </td>
-                          </>
+                          </tr>
                         )}
-                      </tr>
-                    ))}
-                    {isEditing && editingSection === 'tasks' && editingIndex === null && (
-                      <tr>
-                        <td><input type="text" name="title" value={newTask.title} onChange={handleChangeTask} placeholder="Title" /></td>
-                        <td><input type="text" name="openedBy" value={newTask.openedBy} onChange={handleChangeTask} placeholder="Opened By" /></td>
-                        <td><input type="date" name="lastUpdate" value={newTask.lastUpdate} onChange={handleChangeTask} /></td>
-                        <td>
-                          <select name="status" value={newTask.status} onChange={handleChangeTask}>
-                            <option value="In Progress">In Progress</option>
-                            <option value="Completed">Completed</option>
-                          </select>
-                        </td>
-                        <td>
-                          <button onClick={handleSaveTask}>Save</button>
-                          <button className=".cancel-edit-button" onClick={handleCancelEditing}>3</button>
-                          </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-                {!isEditing && <button onClick={() => handleAddNewRow('tasks')}>Add Task</button>}
+                      </tbody>
+                    </table>
+                    {!isEditing && <button onClick={() => handleAddNewRow('tasks')}>Add Task</button>}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        </div>
-        <button className="delete-event-button" onClick={handleDeleteEvent}>Delete Event</button>
+            </div>
+            <button className="delete-event-button" onClick={handleDeleteEvent}>Delete Event</button>
+          </>
+        )}
       </div>
     </div>
   );

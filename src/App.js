@@ -6,26 +6,20 @@ import UserProfile from './UserProfile';
 import PublicProfile from './PublicProfile';
 import Header from './Header';
 import EventPage from './EventPage';
+import Cookies from 'js-cookie';
 
 const App = () => {
-  const mockUser = {
-    coverPhoto: '/cover-photo.jpg',
-    profilePhoto: '/profile-photo.jpg',
-    name: 'Jane Doe',
-    email: 'jane.doe@example.com',
-    phoneNumber: '987-654-3210',
-    bio: 'This is a brief bio about Jane Doe.',
-  };
+  const token = Cookies.get('userToken');
 
   return (
     <Router>
-      <Header/>
+      <Header />
       <Routes>
         <Route path="/signup" element={<Signup />} />
-        <Route path="/profile" element={<UserProfile />} />
-        <Route path="/user/:id" element={<PublicProfile user={mockUser} />} />
-        <Route path="/" element={<Login />} />
-        <Route path="/events" element={<EventPage/>} />
+        <Route path="/profile/:id" element={<UserProfile />} />
+        <Route path="/user/:id" element={<PublicProfile />} />
+        <Route path="/" element={token ? <EventPage /> : <Login />} />
+        <Route path="/events" element={token ? <EventPage /> : <Login />} />
         <Route path="/signin" element={<Login />} />
       </Routes>
     </Router>

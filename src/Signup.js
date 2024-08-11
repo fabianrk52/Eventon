@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Signup.css';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -10,8 +11,8 @@ const Signup = () => {
     phoneNumber: '',
     email: '',
     password: '',
-    confirmPassword: ''
   });
+  const [message, setMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,7 +23,12 @@ const Signup = () => {
   };
 
   const handleSignup = async () => {
-    // Implement signup logic here, e.g., send formData to the server
+    try {
+      const response = await axios.post('/api/signup', { formData });
+      setMessage(response.data.message);
+    } catch (error) {
+      setMessage('Login failed. Please check your credentials.');
+    }
   };
 
   return (
@@ -37,8 +43,8 @@ const Signup = () => {
           className="select-field"
         >
           <option value="">Choose your role</option>
-          <option value="organizer">Organizer</option>
-          <option value="participant">Participant</option>
+          <option value="EventPlanner">Event Planner</option>
+          <option value="EventCustomer">Customer</option>
         </select>
         <input
           type="text"
@@ -89,6 +95,7 @@ const Signup = () => {
           onChange={handleChange}
         />
         <button className="signup-button" onClick={handleSignup}>Sign Up</button>
+        {message && <p className="message">{message}</p>}
         <p>You can also sign up with:</p>
         <div className="social-signup">
           <button className="social-button facebook">F</button>
