@@ -14,7 +14,7 @@ const ServicesPage = () => {
       reviews: 159,
       location: 'Tel Aviv',
       category: 'Catering',
-      image: '/catering.jpeg',
+      image: '/catering.jpg',
     },
     {
       id: 2,
@@ -23,7 +23,7 @@ const ServicesPage = () => {
       reviews: 35,
       location: 'Jerusalem',
       category: 'Photography',
-      image: '/cover-profile.webp',
+      image: '/cover-profile.jpg',
     },
     {
       id: 3,
