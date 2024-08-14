@@ -24,7 +24,7 @@ const testimonials = [
     review: 'Managing corporate events has never been easier. EventOn’s tools for tracking budgets and handling logistics are top-notch.',
     rating: 4.5,
     date: '5 November 2023',
-    profilePic: 'james.jpeg',
+    profilePic: 'james.jpg',
   },
 ];
 
