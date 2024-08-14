@@ -10,6 +10,7 @@ const Header = () => {
         <Link to="/events">Events</Link>
         <Link to="/profile">Profile</Link>
         <Link to="/signup">Sign Up</Link>
+        <Link to="/services">Services</Link>
       </nav>
       <div className="header-logo-container">
         <img src="/logo.png" alt="Eventon Logo" />

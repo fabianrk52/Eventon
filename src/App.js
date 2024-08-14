@@ -9,6 +9,7 @@ import LoginTwoFactorAuth from './Login-2FA';  // Import the 2FA component
 import SignUpTwoFactorAuth from './SignUp-2FA';  // Import the 2FA component
 import Cookies from 'js-cookie';
 import EditProfile from './EditProfile';
+import ServicesPage from './ServicesPage';
 
 const App = () => {
   const token = Cookies.get('userToken');
@@ -18,14 +19,16 @@ const App = () => {
       <Header />
       <Routes>
         <Route path="/signup" element={<Signup />} />
-        <Route path="/signup-2fa" element={token ? <SignUpTwoFactorAuth /> : <Login/>} />  {/* 2FA Route */}
-        <Route path="/profile:id" element={token ? <PublicProfile/> : <Login />} /> {/* Public Profile Route */}
-        <Route path="/edit-profile" element={token ? <EditProfile /> : <Login />} /> {/* Edit Profile Route */}
+        <Route path="/signup-2fa" element={token ? <SignUpTwoFactorAuth /> : <Login />} />
+        <Route path="/profile:id" element={token ? <PublicProfile /> : <Login />} />
+        <Route path="/edit-profile" element={token ? <EditProfile /> : <Login />} />
         <Route path="/" element={token ? <EventPage /> : <Login />} />
         <Route path="/login" element={token ? <EventPage /> : <Login />} />
-        <Route path="/events" element={<EventPage/>} />
+        <Route path="/events" element={<EventPage />} />
         <Route path="/signin" element={<Login />} />
-        <Route path="/login-2fa" element={token ? <LoginTwoFactorAuth /> : <Login/>} />  {/* 2FA Route */}
+        <Route path="/login-2fa" element={token ? <LoginTwoFactorAuth /> : <Login />} />
+        <Route path="/services" element={<ServicesPage />} />
+
       </Routes>
     </Router>
   );
