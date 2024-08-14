@@ -41,7 +41,7 @@ const ServicesPage = () => {
       reviews: 48,
       location: 'Jerusalem',
       category: 'Venue',
-      image: '/weeding.jpeg',
+      image: '/weeding.jpg',
     },
     {
       id: 5,
