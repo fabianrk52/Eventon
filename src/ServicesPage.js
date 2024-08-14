@@ -74,23 +74,29 @@ const ServicesPage = () => {
 
   return (
     <div className="services-page-container">
-      <div className="services-grid">
-        {filteredServices.map((service) => (
-          <div className="service-card" key={service.id}>
-            <img src={service.image} alt={service.title} className="service-image" />
-            <div className="service-info">
-              <h3>{service.title}</h3>
-              <p><strong>Category:</strong> {service.category}</p>
-              <p><strong>Location:</strong> {service.location}</p>
-              <p>({service.reviews} Reviews) {service.rating} <span className="stars">★★★★★</span></p>
-              <button
-                className="info-button"
-                onClick={() => handleMoreInfoClick(service.id)}
-              >+ INFO</button>
+      {filteredServices.length > 0 ? (
+        <div className="services-grid">
+          {filteredServices.map((service) => (
+            <div className="service-card" key={service.id}>
+              <img src={service.image} alt={service.title} className="service-image" />
+              <div className="service-info">
+                <h3>{service.title}</h3>
+                <p><strong>Category:</strong> {service.category}</p>
+                <p><strong>Location:</strong> {service.location}</p>
+                <p>({service.reviews} Reviews) {service.rating} <span className="stars">★★★★★</span></p>
+                <button
+                  className="info-button"
+                  onClick={() => handleMoreInfoClick(service.id)}
+                >+ INFO</button>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="no-results-container">
+          <img src="/not_found.gif" alt="No results found" className="not-found-gif" />
+        </div>
+      )}
       <div className="sidebar">
         <h4>Category</h4>
         <select value={category} onChange={(e) => setCategory(e.target.value)}>
