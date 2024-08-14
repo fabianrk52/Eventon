@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Profile.css';
 import { useParams } from 'react-router-dom';
-
+import Cookies from 'js-cookie';
 
 const EditProfile = () => {
+
+  const userID = Cookies.get('userID');
+
   const { id } = useParams();
   const [formData, setFormData] = useState({
     coverPhoto: '',
@@ -21,7 +24,7 @@ const EditProfile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`/api/user-profile/${id}`); // Replace with your API endpoint
+        const response = await axios.get(`/api/user-profile/${userID}`); // Replace with your API endpoint
         const userData = response.data;
         setFormData({
           coverPhoto: userData.coverPhoto || 'default-cover.jpg',

@@ -22,7 +22,7 @@ const Header = () => {
           <Link to="/">Home</Link>
           <Link to="/events">Events</Link>
           <Link to="/services">Services</Link>
-          <Link to="/profile">Profile</Link>
+          <Link to="/my-profile">Profile</Link>
         </nav>
       </div>
       <div className="header-user-container">
