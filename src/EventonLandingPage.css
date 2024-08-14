@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap');
+
+/* Container for the entire landing page */
+.landing-page {
+    background-color: #e6f0fa;
+    font-family: 'Montserrat', sans-serif; /* Updated font */
+    color: #333;
+    text-align: center;
+    padding: 40px 20px;
+  }
+  
+  /* Hero section containing images and text */
+  .landing-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 40px;
+  }
+  
+  /* Image grid styling */
+  .image-grid {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .image-grid img {
+    width: 33%;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+  
+  /* Hero text styling */
+  .hero-text {
+    margin-top: 20px;
+    max-width: 800px;
+  }
+  
+/* Hero text styling */
+.hero-text h1 {
+    font-family: 'Playfair Display', serif; /* Elegant heading font */
+    font-size: 3rem;
+    color: #4f5d75;
+    margin-bottom: 20px;
+  }
+  
+  .hero-text p {
+    font-family: 'Montserrat', sans-serif; /* Modern body font */
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: #606060;
+  }
+  
+  .testimonial-section {
+    background-color: #f0f4fc;
+    padding: 30px;
+    border-radius: 8px;
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  
+  .testimonial-card {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 800px;
+    width: 100%;
+    position: relative;
+  }
+  
+  .profile-picture img {
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    margin-right: 20px;
+  }
+  
+  .testimonial-content {
+    text-align: left;
+    flex-grow: 1;
+  }
+  
+  .testimonial-content h3 {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+  }
+  
+  .testimonial-content p {
+    font-size: 1rem;
+    color: #606060;
+  }
+  
+  .rating {
+    font-size: 1.25rem;
+    color: #ffc107;
+    margin-top: 10px;
+  }
+  
+  .testimonial-date {
+    font-size: 0.9rem;
+    color: #999999;
+    margin-left: 20px;
+  }
+  
+  /* Navigation buttons */
+  .testimonial-nav {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 10px;
+    color: #333;
+  }
+  
+  .testimonial-nav:hover {
+    color: #000;
+  }

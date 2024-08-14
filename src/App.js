@@ -10,6 +10,7 @@ import SignUpTwoFactorAuth from './SignUp-2FA';
 import Cookies from 'js-cookie';
 import EditProfile from './EditProfile';
 import ServicesPage from './ServicesPage';
+import EventonLandingPage from './EventonLandingPage';
 
 const App = () => {
   const token = Cookies.get('userToken');
@@ -20,9 +21,9 @@ const App = () => {
       <Routes>
         <Route path="/signup" element={<Signup />} />
         <Route path="/signup-2fa" element={token ? <SignUpTwoFactorAuth /> : <Login />} />
-        <Route path="/profile/:id" element={token ? <PublicProfile /> : <Login />} />
+        <Route path="/profile/:id" element= {<PublicProfile />}/>
         <Route path="/edit-profile" element={token ? <EditProfile /> : <Login />} />
-        <Route path="/" element={token ? <EventPage /> : <Login />} />
+        <Route path="/" element={<EventonLandingPage/>}/>
         <Route path="/login" element={token ? <EventPage /> : <Login />} />
         <Route path="/events" element={<EventPage />} />
         <Route path="/services" element={<ServicesPage />} />
