@@ -37,7 +37,7 @@ const Signup = () => {
         const token = response.data.token;
 
         // Store the token in a cookie
-        Cookies.set('userToken', token, { expires: 7 });
+        // Cookies.set('userToken', token, { expires: 7 });
 
         // Redirect to the 2FA page
         navigate('/signup-2fa');

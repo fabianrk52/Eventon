@@ -12,24 +12,25 @@ const LoginTwoFactorAuth = () => {
 
   const handleVerify = async () => {
     navigate('/events');
-    // try {
-    //   const token = Cookies.get('userToken');
-    //   const response = await axios.post('/api/auth/login-2fa', { token, code }, {
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   });
+    try {
+      const token = Cookies.get('userToken');
+      const response = await axios.post('/api/auth/login-2fa', { token, code }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    //   if (response.status === 200) {
-    //     // 2FA is successful, redirect to the dashboard or events page
-    //     setMessage("Successful Login!");
-    //     navigate('/events');
-    //   } else {
-    //     setMessage('Invalid 2FA code.');
-    //   }
-    // } catch (error) {
-    //   setMessage('Verification failed. Please try again.');
-    // }
+      if (response.status === 200) {
+        // 2FA is successful, redirect to the dashboard or events page
+        setMessage("Successful Login!");
+        Cookies.set('userToken', token, { expires: 7 });
+        navigate('/events');
+      } else {
+        setMessage('Invalid 2FA code.');
+      }
+    } catch (error) {
+      setMessage('Verification failed. Please try again.');
+    }
   };
 
   const handleResendCode = async () => {

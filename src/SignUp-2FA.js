@@ -22,6 +22,7 @@ const SignUpTwoFactorAuth = () => {
 
       if (response.status === 201) {
         // 2FA is successful, redirect to the dashboard or events page
+        Cookies.set('userToken', token, { expires: 7 });
         setMessage("Successful Login!");
         navigate('/profile');
       } else {
