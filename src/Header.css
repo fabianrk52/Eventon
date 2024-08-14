@@ -1,17 +1,25 @@
 .header {
-  width: 99%;
   background-color: #8dc2fa;
-  padding: 5px 15px;
+  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.header-logo {
+  height: 40px;
+  margin-right: 20px;
+}
+
 .header-nav {
   display: flex;
-  justify-content: flex-start;
-  flex-grow: 1;
+  align-items: center; /* Ensure the links are vertically aligned with the logo */
 }
 
 .header-nav a {
@@ -27,14 +35,38 @@
   text-decoration: underline;
 }
 
-.header-logo-container {
-  flex-shrink: 0; /* Prevents the logo from shrinking */
+.header-user-container {
   display: flex;
-  justify-content: flex-end;
-  width: 40px; /* Ensure the logo container stays fixed */
+  align-items: center;
 }
 
-.header-logo-container img {
-  width: 100%; /* Make sure the image uses the full width of the container */
-  height: auto;
+.header-auth-link {
+  color: white;
+  text-decoration: none;
+  margin-left: 15px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.header-auth-link:hover {
+  text-decoration: underline;
+}
+
+.header-username {
+  color: white;
+  font-weight: bold;
+  margin-right: 15px;
+}
+
+.header-signout-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.header-signout-button:hover {
+  text-decoration: underline;
 }
