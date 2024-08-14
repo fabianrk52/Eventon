@@ -29,8 +29,10 @@ const Signup = () => {
   };
 
   const handleSignup = async () => {
+    // Redirect to the 2FA page
+    navigate('/signup-2fa');
     try {
-      const response = await axios.post('/api/signup', { formData});
+      const response = await axios.post('/api/signup', { formData });
       if (response.status === 200) {
         const token = response.data.token;
 

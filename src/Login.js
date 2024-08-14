@@ -13,20 +13,21 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    try {
-      const response = await axios.post('/api/login', { email, password });
-      if (response.status === 200) {
-        const token = response.data.token;
-        Cookies.set('userToken', token, { expires: 7 });
+    navigate('/login-2fa');
+    // try {
+    //   const response = await axios.post('/api/login', { email, password });
+    //   if (response.status === 200) {
+    //     const token = response.data.token;
+    //     Cookies.set('userToken', token, { expires: 7 });
 
-        // Redirect to the public profile page
-        navigate('/profile');
-      } else {
-        setMessage('Invalid login credentials.');
-      }
-    } catch (error) {
-      setMessage('Login failed. Please check your credentials.');
-    }
+    //     // Redirect to the public profile page
+    //     navigate('/login-2fa');
+    //   } else {
+    //     setMessage('Invalid login credentials.');
+    //   }
+    // } catch (error) {
+    //   setMessage('Login failed. Please check your credentials.');
+    // }
   };
 
   return (

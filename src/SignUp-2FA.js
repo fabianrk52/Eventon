@@ -11,6 +11,7 @@ const SignUpTwoFactorAuth = () => {
   const navigate = useNavigate();
 
   const handleVerify = async () => {
+    navigate('/my-profile');
     try {
       const token = Cookies.get('userToken');
       const response = await axios.post('/api/auth/activate-user', { token, code }, {
