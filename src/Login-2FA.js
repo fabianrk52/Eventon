@@ -42,9 +42,9 @@ const LoginTwoFactorAuth = () => {
         },
       });
 
-      setMessage('A new 2FA code has been sent.');
+      setMessage('A new code has been sent.');
     } catch (error) {
-      setMessage('Failed to resend 2FA code. Please try again.');
+      setMessage('Please try again.');
     }
   };
 
