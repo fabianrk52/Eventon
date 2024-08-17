@@ -54,6 +54,7 @@ const Header = () => {
             )}
           </div>
           <Link to="/my-profile">Profile</Link>
+          <Link to="/supplier-messages" className="header-messages-link">Messages</Link> {/* New Link */}
         </nav>
       </div>
       <div className="header-user-container">

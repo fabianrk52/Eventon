@@ -12,6 +12,7 @@ import MyProfile from './MyProfile';
 import ServicesPage from './ServicesPage';
 import EventonLandingPage from './EventonLandingPage';
 import EditProfile from './EditProfile';
+import SupplierMessagesPage from './SupplierMessagePage';
 
 const App = () => {
   const token = Cookies.get('userToken');
@@ -31,6 +32,7 @@ const App = () => {
         <Route path="/services" element={<ServicesPage />} />
         <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="*" element={<Navigate to ='/' />}/>
+        <Route path="/supplier-messages" element={<SupplierMessagesPage />} />
       </Routes>
     </Router>
   );

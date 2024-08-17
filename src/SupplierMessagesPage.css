@@ -1,0 +1,80 @@
+.supplier-messages-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.supplier-messages-page h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 28px;
+  color: #333;
+}
+
+.messages-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  table-layout: fixed; /* Ensures consistent column widths */
+}
+
+.messages-table th,
+.messages-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+  vertical-align: top; /* Ensures text aligns to the top of the cell */
+  word-wrap: break-word; /* Forces long text to wrap to the next line */
+  overflow-wrap: break-word; /* Additional wrapping for long text */
+}
+
+.messages-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+  color: #333;
+}
+
+.messages-table td {
+  white-space: normal; /* Allows text to wrap normally */
+}
+
+.messages-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.messages-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.edit-button, .save-button, .cancel-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-right: 8px;
+}
+
+.edit-button:hover, .save-button:hover {
+  background-color: #0056b3;
+}
+
+.cancel-button {
+  background-color: #dc3545;
+}
+
+.cancel-button:hover {
+  background-color: #c82333;
+}
+
+select {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
