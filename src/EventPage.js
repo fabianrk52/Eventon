@@ -22,8 +22,8 @@ const EventPage = () => {
         { name: 'Jane', surname: 'Smith', phone: '098-765-4321', confirmation: 'Pending', table: '2' }
       ],
       tasks: [
-        { title: 'Setup Venue', openedBy: 'Alice', lastUpdate: '2024-08-10', status: 'In Progress' },
-        { title: 'Send Invitations', openedBy: 'Bob', lastUpdate: '2024-08-08', status: 'Completed' }
+        { title: 'Setup Venue', description: 'Setup the venue', deadline: '2024-08-14', priority: 'High', teammate: 'John Doe', status: 'In Progress' },
+        { title: 'Send Invitations', description: 'Send invitations to all guests', deadline: '2024-08-09', priority: 'Medium', teammate: 'Jane Smith', status: 'Completed' }
       ],
     },
     // Other initial events...
@@ -39,18 +39,14 @@ const EventPage = () => {
   const [editingSection, setEditingSection] = useState(null);
   const [editingIndex, setEditingIndex] = useState(null);
   const [newGuest, setNewGuest] = useState({ name: '', surname: '', phone: '', confirmation: '', table: '' });
-  const [newTask, setNewTask] = useState({ title: '', openedBy: '', lastUpdate: '', status: '' });
+  const [newTask, setNewTask] = useState({ title: '', description: '', deadline: '', priority: '', teammate: '', status: '' });
   const [newDescription, setNewDescription] = useState('');
   const [newBudget, setNewBudget] = useState('');  // New state for budget
   const [newStatus, setNewStatus] = useState('');  // New state for status
   const [newNumGuests, setNewNumGuests] = useState('');  // New state for number of guests
   const [newTeammate, setNewTeammate] = useState('');  // New state for teammate
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
-
-  // Fetch events here with useEffect if needed (commented out for now)
 
   const handleEventSelection = (event) => {
     setSelectedEvent(event);
@@ -81,13 +77,12 @@ const EventPage = () => {
     }
   };
 
-
   const handleCancelEditing = () => {
     setIsEditing(false);
     setEditingSection(null);
     setEditingIndex(null);
     setNewGuest({ name: '', surname: '', phone: '', confirmation: '', table: '' });
-    setNewTask({ title: '', openedBy: '', lastUpdate: '', status: '' });
+    setNewTask({ title: '', description: '', openedBy: '', deadline: '', priority: '', teammate: '', status: '' });
     setNewDescription('');
     setNewBudget('');
     setNewStatus('');
@@ -166,6 +161,26 @@ const EventPage = () => {
     }
   };
 
+  const handleDeleteGuest = async (index) => {
+    try {
+      const updatedGuests = selectedEvent.guests.filter((_, i) => i !== index);
+      const updatedEvent = { ...selectedEvent, guests: updatedGuests };
+
+      const response = await axios.put(`https://your-api-endpoint.com/events/${selectedEvent.id}`, updatedEvent, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('userToken')}`, // Use token from cookies
+        },
+      });
+
+      if (response.status === 200) {
+        setEvents(events.map(event => event.id === selectedEvent.id ? updatedEvent : event));
+        setSelectedEvent(updatedEvent);
+      }
+    } catch (error) {
+      console.error('Error deleting the guest:', error);
+    }
+  };
+
   const handleSaveTask = async () => {
     try {
       let updatedTasks;
@@ -193,6 +208,25 @@ const EventPage = () => {
     }
   };
 
+  const handleDeleteTask = async (index) => {
+    try {
+      const updatedTasks = selectedEvent.tasks.filter((_, i) => i !== index);
+      const updatedEvent = { ...selectedEvent, tasks: updatedTasks };
+
+      const response = await axios.put(`https://your-api-endpoint.com/events/${selectedEvent.id}`, updatedEvent, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('userToken')}`, // Use token from cookies
+        },
+      });
+
+      if (response.status === 200) {
+        setEvents(events.map(event => event.id === selectedEvent.id ? updatedEvent : event));
+        setSelectedEvent(updatedEvent);
+      }
+    } catch (error) {
+      console.error('Error deleting the task:', error);
+    }
+  };
 
   const handleAddNewRow = (section) => {
     setEditingSection(section);
@@ -200,9 +234,9 @@ const EventPage = () => {
     setEditingIndex(null);
 
     if (section === 'guests') {
-      setNewGuest({ name: '', surname: '', phone: '', confirmation: '' });
+      setNewGuest({ name: '', surname: '', phone: '', confirmation: '', table: '' });
     } else if (section === 'tasks') {
-      setNewTask({ title: '', openedBy: '', lastUpdate: '', status: '' });
+      setNewTask({ title: '', description: '', openedBy: '', deadline: '', priority: '', teammate: '', status: '' });
     }
   };
 
@@ -299,10 +333,11 @@ const EventPage = () => {
                         </div>
                       )
                     }
-
                   </div>
                 )}
               </div>
+
+              {/* Guests Section */}
               <div className="accordion-section">
                 <div className="accordion-header" onClick={() => toggleSection('guests')}>
                   Guests
@@ -335,7 +370,7 @@ const EventPage = () => {
                                     <option value="Pending">Pending</option>
                                   </select>
                                 </td>
-                                <td><input type="text" name="table" value={newGuest.table} onChange={(e) => setNewGuest({ ...newGuest, table: e.target.value })} placeholder="Table Number" /></td> {/* New input for table number */}
+                                <td><input type="text" name="table" value={newGuest.table} onChange={(e) => setNewGuest({ ...newGuest, table: e.target.value })} placeholder="Table Number" /></td>
                                 <td>
                                   <button onClick={handleSaveGuest} className='save'>Save</button>
                                   <button onClick={handleCancelEditing} className='cancel'>Cancel</button>
@@ -350,6 +385,7 @@ const EventPage = () => {
                                 <td>{guest.table}</td>
                                 <td>
                                   <button onClick={() => handleEditSection('guests', index)} className="edit">Edit</button>
+                                  <button onClick={() => handleDeleteGuest(index)} className="cancel">Delete</button>
                                 </td>
                               </>
                             )}
@@ -366,7 +402,7 @@ const EventPage = () => {
                                 <option value="Pending">Pending</option>
                               </select>
                             </td>
-                            <td><input type="text" name="table" value={newGuest.table} onChange={(e) => setNewGuest({ ...newGuest, table: e.target.value })} placeholder="Table Number" /></td> {/* New input for table number */}
+                            <td><input type="text" name="table" value={newGuest.table} onChange={(e) => setNewGuest({ ...newGuest, table: e.target.value })} placeholder="Table Number" /></td>
                             <td>
                               <button onClick={handleSaveGuest} className='save'>Save</button>
                               <button onClick={handleCancelEditing} className='cancel'>Cancel</button>
@@ -380,6 +416,7 @@ const EventPage = () => {
                 )}
               </div>
 
+              {/* Tasks Section */}
               <div className="accordion-section">
                 <div className="accordion-header" onClick={() => toggleSection('tasks')}>
                   Tasks
@@ -391,8 +428,10 @@ const EventPage = () => {
                       <thead>
                         <tr>
                           <th>Title</th>
-                          <th>Opened By</th>
-                          <th>Last Update</th>
+                          <th>Description</th>
+                          <th>Deadline</th>
+                          <th>Priority</th>
+                          <th>Teammate</th>
                           <th>Status</th>
                           <th>Actions</th>
                         </tr>
@@ -403,8 +442,16 @@ const EventPage = () => {
                             {isEditing && editingSection === 'tasks' && editingIndex === index ? (
                               <>
                                 <td><input type="text" name="title" value={newTask.title} onChange={(e) => setNewTask({ ...newTask, title: e.target.value })} placeholder="Title" /></td>
-                                <td><input type="text" name="openedBy" value={newTask.openedBy} onChange={(e) => setNewTask({ ...newTask, openedBy: e.target.value })} placeholder="Opened By" /></td>
-                                <td><input type="date" name="lastUpdate" value={newTask.lastUpdate} onChange={(e) => setNewTask({ ...newTask, lastUpdate: e.target.value })} /></td>
+                                <td><input type="text" name="description" value={newTask.description} onChange={(e) => setNewTask({ ...newTask, description: e.target.value })} placeholder="Description" /></td>
+                                <td><input type="date" name="deadline" value={newTask.deadline} onChange={(e) => setNewTask({ ...newTask, deadline: e.target.value })} /></td>
+                                <td>
+                                  <select name="priority" value={newTask.priority} onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })}>
+                                    <option value="Low">Low</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="High">High</option>
+                                  </select>
+                                </td>
+                                <td><input type="text" name="teammate" value={newTask.teammate} onChange={(e) => setNewTask({ ...newTask, teammate: e.target.value })} placeholder="Teammate" /></td>
                                 <td>
                                   <select name="status" value={newTask.status} onChange={(e) => setNewTask({ ...newTask, status: e.target.value })}>
                                     <option value="In Progress">In Progress</option>
@@ -419,11 +466,14 @@ const EventPage = () => {
                             ) : (
                               <>
                                 <td>{task.title}</td>
-                                <td>{task.openedBy}</td>
-                                <td>{task.lastUpdate}</td>
+                                <td>{task.description}</td>
+                                <td>{task.deadline}</td>
+                                <td>{task.priority}</td>
+                                <td>{task.teammate}</td>
                                 <td>{task.status}</td>
                                 <td>
                                   <button onClick={() => handleEditSection('tasks', index)} className="edit">Edit</button>
+                                  <button onClick={() => handleDeleteTask(index)} className="cancel">Delete</button>
                                 </td>
                               </>
                             )}
@@ -432,8 +482,16 @@ const EventPage = () => {
                         {isEditing && editingSection === 'tasks' && editingIndex === null && (
                           <tr>
                             <td><input type="text" name="title" value={newTask.title} onChange={(e) => setNewTask({ ...newTask, title: e.target.value })} placeholder="Title" /></td>
-                            <td><input type="text" name="openedBy" value={newTask.openedBy} onChange={(e) => setNewTask({ ...newTask, openedBy: e.target.value })} placeholder="Opened By" /></td>
-                            <td><input type="date" name="lastUpdate" value={newTask.lastUpdate} onChange={(e) => setNewTask({ ...newTask, lastUpdate: e.target.value })} /></td>
+                            <td><input type="text" name="description" value={newTask.description} onChange={(e) => setNewTask({ ...newTask, description: e.target.value })} placeholder="Description" /></td>
+                            <td><input type="date" name="deadline" value={newTask.deadline} onChange={(e) => setNewTask({ ...newTask, deadline: e.target.value })} /></td>
+                            <td>
+                              <select name="priority" value={newTask.priority} onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })}>
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                              </select>
+                            </td>
+                            <td><input type="text" name="teammate" value={newTask.teammate} onChange={(e) => setNewTask({ ...newTask, teammate: e.target.value })} placeholder="Teammate" /></td>
                             <td>
                               <select name="status" value={newTask.status} onChange={(e) => setNewTask({ ...newTask, status: e.target.value })}>
                                 <option value="In Progress">In Progress</option>
