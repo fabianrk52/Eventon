@@ -41,6 +41,9 @@ const EventPage = () => {
   const [newGuest, setNewGuest] = useState({ name: '', surname: '', phone: '', confirmation: '', table: '' });
   const [newTask, setNewTask] = useState({ title: '', description: '', deadline: '', priority: '', teammate: '', status: '' });
   const [newDescription, setNewDescription] = useState('');
+  const [newTitle, setNewTitle] = useState('');  // New state for title
+  const [newDate, setNewDate] = useState('');  // New state for date
+  const [newLocation, setNewLocation] = useState('');  // New state for location
   const [newBudget, setNewBudget] = useState('');  // New state for budget
   const [newStatus, setNewStatus] = useState('');  // New state for status
   const [newNumGuests, setNewNumGuests] = useState('');  // New state for number of guests
@@ -69,7 +72,14 @@ const EventPage = () => {
     setEditingIndex(index);
 
     if (section === 'details') {
+      setNewTitle(selectedEvent.title);
+      setNewDate(selectedEvent.date);
+      setNewLocation(selectedEvent.location);
       setNewDescription(selectedEvent.description);
+      setNewBudget(selectedEvent.budget);
+      setNewStatus(selectedEvent.status);
+      setNewNumGuests(selectedEvent.numGuests);
+      setNewTeammate(selectedEvent.teammate);
     } else if (section === 'guests' && index !== null) {
       setNewGuest(selectedEvent.guests[index]);
     } else if (section === 'tasks' && index !== null) {
@@ -82,7 +92,10 @@ const EventPage = () => {
     setEditingSection(null);
     setEditingIndex(null);
     setNewGuest({ name: '', surname: '', phone: '', confirmation: '', table: '' });
-    setNewTask({ title: '', description: '', openedBy: '', deadline: '', priority: '', teammate: '', status: '' });
+    setNewTask({ title: '', description: '', deadline: '', priority: '', teammate: '', status: '' });
+    setNewTitle('');
+    setNewDate('');
+    setNewLocation('');
     setNewDescription('');
     setNewBudget('');
     setNewStatus('');
@@ -94,6 +107,9 @@ const EventPage = () => {
     try {
       const updatedEvent = {
         ...selectedEvent,
+        title: newTitle,
+        date: newDate,
+        location: newLocation,
         description: newDescription,
         budget: newBudget,
         status: newStatus,
@@ -270,6 +286,32 @@ const EventPage = () => {
                     {
                       isEditing && editingSection === 'details' ? (
                         <form className="edit-details-form">
+                          <div>
+                            <label>Title</label>
+                            <input
+                              type="text"
+                              value={newTitle}
+                              onChange={(e) => setNewTitle(e.target.value)}
+                              placeholder="Enter event title"
+                            />
+                          </div>
+                          <div>
+                            <label>Date</label>
+                            <input
+                              type="date"
+                              value={newDate}
+                              onChange={(e) => setNewDate(e.target.value)}
+                            />
+                          </div>
+                          <div>
+                            <label>Location</label>
+                            <input
+                              type="text"
+                              value={newLocation}
+                              onChange={(e) => setNewLocation(e.target.value)}
+                              placeholder="Enter event location"
+                            />
+                          </div>
                           <div>
                             <label>Description</label>
                             <textarea
