@@ -15,6 +15,7 @@ const Signup = () => {
     phoneNumber: '',
     email: '',
     password: '',
+    supplierCategory: ''
   });
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
@@ -61,10 +62,24 @@ const Signup = () => {
           onChange={handleChange}
           className="select-field"
         >
-          <option value="">Choose your role</option>
           <option value="EventPlanner">Event Planner</option>
-          <option value="EventCustomer">Customer</option>
+          <option value="Supplier">Supplier</option>
         </select>
+        {formData.role === "Supplier" && (
+          <select
+            name="supplierCategory"
+            value={formData.supplierCategory}
+            onChange={handleChange}
+            className="select-field"
+          >
+            <option value="">Choose Supplier Category</option>
+            <option value="Catering">Catering</option>
+            <option value="Decoration">Decoration</option>
+            <option value="Music">Music</option>
+            <option value="Photography">Photography</option>
+            <option value="Hall">Hall</option>
+          </select>
+        )}
         <input
           type="text"
           name="firstName"
@@ -117,8 +132,8 @@ const Signup = () => {
         {message && <p className="message">{message}</p>}
         <p>You can also sign up with:</p>
         <div className="social-signup">
-          <i class="fa-brands fa-facebook"></i>
-          <i class="fa-brands fa-google google"></i>
+          <i class="fa-brands fa-facebook fa-xl"></i>
+          <i class="fa-brands fa-google google fa-xl"></i>
         </div>
         <p>Already have an account? <Link to="/" className="login-link">Login</Link></p>
       </div>

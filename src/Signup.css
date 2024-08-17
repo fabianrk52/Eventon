@@ -7,7 +7,7 @@ body {
   
   .signup-container {
     display: flex;
-    height: 100vh;
+    height: 93vh;
     justify-content: center;
     align-items: center;
   }
@@ -58,28 +58,8 @@ body {
   }
   
   .social-signup {
-    display: flex;
     justify-content: center;
-    margin: 10px 0;
-  }
-  
-  .social-button {
-    width: 40px;
-    height: 40px;
-    border: none;
-    border-radius: 50%;
-    margin: 0 5px;
-    cursor: pointer;
-  }
-  
-  .facebook {
-    background-color: #3b5998;
-    color: white;
-  }
-  
-  .google {
-    background-color: #db4437;
-    color: white;
+    margin: 15px 0;
   }
   
   .login-link {

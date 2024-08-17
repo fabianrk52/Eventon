@@ -40,7 +40,7 @@ const ServicesPage = () => {
       rating: 4.7,
       reviews: 48,
       location: 'Jerusalem',
-      category: 'Venue',
+      category: 'Hall',
       image: '/weeding.jpg',
     },
     {
@@ -49,7 +49,7 @@ const ServicesPage = () => {
       rating: 4.7,
       reviews: 48,
       location: 'Tel Aviv',
-      category: 'Design',
+      category: 'Decoration',
       image: '/design.jpg',
     },
   ];
@@ -104,8 +104,8 @@ const ServicesPage = () => {
           <option value="Catering">Catering</option>
           <option value="Photography">Photography</option>
           <option value="Music">Music</option>
-          <option value="Venue">Venue</option>
-          <option value="Design">Design</option>
+          <option value="Hall">Hall</option>
+          <option value="Decoration">Decoration</option>
         </select>
 
         <h4>Location</h4>
