@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import * as XLSX from 'xlsx'; // Import the xlsx library
 import './SupplierMessagesPage.css';
 
 const SupplierMessagesPage = () => {
@@ -84,6 +85,23 @@ const SupplierMessagesPage = () => {
 
   const filteredMessages = messages.filter(applyFilters);
 
+  const handleExport = () => {
+    const exportData = filteredMessages.map((message, index) => ({
+      "Inquiry Number": index + 1,
+      "Customer Name": message.name,
+      "Email": message.email,
+      "Phone": message.phone,
+      "Message": message.message,
+      "Date Sent": new Date(message.date).toLocaleDateString(),
+      "Status": message.status,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Inquiries");
+    XLSX.writeFile(workbook, "Customer_Inquiries.xlsx");
+  };
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -139,6 +157,10 @@ const SupplierMessagesPage = () => {
             <button onClick={() => { setFilterName(''); setFilterStatus(''); setFilterDateFrom(''); setFilterDateTo(''); }}>Reset Filters</button>
           </div>
         </div>
+      </div>
+
+      <div className="export-section">
+        <button onClick={handleExport}>Export to Excel</button>
       </div>
 
       {filteredMessages.length > 0 ? (

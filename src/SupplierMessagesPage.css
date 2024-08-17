@@ -116,8 +116,29 @@
 
 .cancel-button {
   background-color: #dc3545;
+  margin-top: 10px;
 }
 
 .cancel-button:hover {
   background-color: #c82333;
+}
+
+.export-section {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.export-section button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.export-section button:hover {
+  background-color: #218838;
 }
