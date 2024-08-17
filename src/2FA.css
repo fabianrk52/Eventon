@@ -7,7 +7,7 @@ body {
 
 .twofa-container {
     display: flex;
-    height: 100vh;
+    height: 92vh;
     justify-content: center;
     align-items: center;
 }
@@ -47,9 +47,9 @@ body {
 }
 
 .resend-link {
-    display: block;
-    text-align: center;
+    display: relative;
     margin-top: 10px;
     color: #007bff;
-    text-decoration: none;
+    background-color: white;
+    border: none;
 }

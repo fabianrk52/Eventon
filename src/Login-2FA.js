@@ -55,7 +55,7 @@ const LoginTwoFactorAuth = () => {
         <h3>Two-Factor Authentication</h3>
         <input
           type="text"
-          placeholder="Enter your 2FA code"
+          placeholder="Please enter the received code"
           className="input-field"
           value={code}
           onChange={(e) => setCode(e.target.value)}
