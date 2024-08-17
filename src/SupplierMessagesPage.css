@@ -14,11 +14,65 @@
   color: #333;
 }
 
+.filters-section {
+  margin-bottom: 20px;
+}
+
+.filters-section h3 {
+  margin-bottom: 10px;
+  font-size: 20px;
+  color: #333;
+}
+
+.filters {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filters input[type="text"],
+.filters input[type="date"],
+.filters select {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.filters .filter-block {
+  display: flex;
+  flex-direction: column;
+  margin-right: 10px;
+}
+
+.filters .filter-block label {
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: #555;
+}
+
+.filters button {
+  margin-top: 20px;
+  padding: 8px 16px;
+  font-size: 14px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.filters button:hover {
+  background-color: #0056b3;
+}
+
 .messages-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-  table-layout: fixed; /* Ensures consistent column widths */
+  table-layout: fixed;
 }
 
 .messages-table th,
@@ -26,19 +80,15 @@
   border: 1px solid #ddd;
   padding: 12px;
   text-align: left;
-  vertical-align: top; /* Ensures text aligns to the top of the cell */
-  word-wrap: break-word; /* Forces long text to wrap to the next line */
-  overflow-wrap: break-word; /* Additional wrapping for long text */
+  vertical-align: top;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .messages-table th {
   background-color: #f4f4f4;
   font-weight: bold;
   color: #333;
-}
-
-.messages-table td {
-  white-space: normal; /* Allows text to wrap normally */
 }
 
 .messages-table tr:nth-child(even) {
@@ -70,11 +120,4 @@
 
 .cancel-button:hover {
   background-color: #c82333;
-}
-
-select {
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
 }

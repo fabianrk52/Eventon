@@ -9,19 +9,38 @@ const SupplierMessagesPage = () => {
   const [editingStatusId, setEditingStatusId] = useState(null); // Track which inquiry is being edited
   const [newStatus, setNewStatus] = useState(''); // Track the new status during editing
 
-  useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        const response = await axios.get('/api/supplier-messages'); // Replace with your actual API endpoint
-        setMessages(response.data);
-        setLoading(false);
-      } catch (err) {
-        setError('Failed to load messages');
-        setLoading(false);
-      }
-    };
+  // Filters
+  const [filterName, setFilterName] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
+  const [filterDateFrom, setFilterDateFrom] = useState('');
+  const [filterDateTo, setFilterDateTo] = useState('');
 
-    fetchMessages();
+  // Sample data
+  const inquiries = [
+    {
+      id: 1,
+      name: "John Doe",
+      email: "john.doe@example.com",
+      phone: "+1 555-123-4567",
+      message: "I'm interested in your catering services for a wedding in December. Could you please provide more details on pricing and availability?",
+      date: "2024-08-01T10:00:00Z",
+      status: "Pending"
+    },
+    {
+      id: 2,
+      name: "Jane Smith",
+      email: "jane.smith@example.com",
+      phone: "+1 555-987-6543",
+      message: "I'm looking for decoration services for a corporate event. Do you offer package deals for large events?",
+      date: "2024-08-02T12:30:00Z",
+      status: "In Progress"
+    },
+    // More inquiries...
+  ];
+
+  useEffect(() => {
+    setMessages(inquiries); // Set initial messages
+    setLoading(false);
   }, []);
 
   const handleEditStatus = (id, currentStatus) => {
@@ -31,7 +50,7 @@ const SupplierMessagesPage = () => {
 
   const handleSaveStatus = async (id) => {
     try {
-      // Update the status in the backend
+      // Update the status in the backend (if applicable)
       await axios.put(`/api/supplier-messages/${id}`, { status: newStatus });
 
       // Update the status in the frontend
@@ -50,66 +69,79 @@ const SupplierMessagesPage = () => {
     setEditingStatusId(null); // Exit editing mode without saving changes
   };
 
-//   if (loading) {
-//     return <p>Loading...</p>;
-//   }
+  const applyFilters = (message) => {
+    const messageDate = new Date(message.date);
+    const dateFrom = filterDateFrom ? new Date(filterDateFrom) : null;
+    const dateTo = filterDateTo ? new Date(filterDateTo) : null;
 
-//   if (error) {
-//     return <p>{error}</p>;
-//   }
+    return (
+      (filterName === '' || message.name.toLowerCase().includes(filterName.toLowerCase())) &&
+      (filterStatus === '' || message.status === filterStatus) &&
+      (!dateFrom || messageDate >= dateFrom) &&
+      (!dateTo || messageDate <= dateTo)
+    );
+  };
 
-const Inquries = [
-    {
-      "id": 1,
-      "name": "John Doe",
-      "email": "john.doe@example.com",
-      "phone": "+1 555-123-4567",
-      "message": "I'm interested in your catering services for a wedding in December. Could you please provide more details on pricing and availability?",
-      "date": "2024-08-01T10:00:00Z",
-      "status": "Pending"
-    },
-    {
-      "id": 2,
-      "name": "Jane Smith",
-      "email": "jane.smith@example.com",
-      "phone": "+1 555-987-6543",
-      "message": "I'm looking for decoration services for a corporate event. Do you offer package deals for large events?",
-      "date": "2024-08-02T12:30:00Z",
-      "status": "In Progress"
-    },
-    {
-      "id": 3,
-      "name": "Michael Johnson",
-      "email": "michael.johnson@example.com",
-      "phone": "+1 555-555-5555",
-      "message": "I need a DJ for a birthday party. Do you have any availability in November?",
-      "date": "2024-08-03T09:45:00Z",
-      "status": "Resolved"
-    },
-    {
-      "id": 4,
-      "name": "Emily Davis",
-      "email": "emily.davis@example.com",
-      "phone": "+1 555-222-3333",
-      "message": "Can you provide details on your photography services? I'm planning a family reunion and need a photographer.",
-      "date": "2024-08-04T14:00:00Z",
-      "status": "Pending"
-    },
-    {
-      "id": 5,
-      "name": "Chris Brown",
-      "email": "chris.brown@example.com",
-      "phone": "+1 555-444-7777",
-      "message": "I would like to know more about your event hall rentals. I'm organizing a charity event.",
-      "date": "2024-08-05T16:30:00Z",
-      "status": "In Progress"
-    }
-  ]
-  
+  const filteredMessages = messages.filter(applyFilters);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
   return (
     <div className="supplier-messages-page">
       <h1>Customer Inquiries</h1>
-      {Inquries.length > 0 ? (
+
+      <div className="filters-section">
+        <h3>Filters</h3>
+        <div className="filters">
+          <div className="filter-block">
+            <label>Filter by Name</label>
+            <input
+              type="text"
+              value={filterName}
+              onChange={(e) => setFilterName(e.target.value)}
+            />
+          </div>
+          <div className="filter-block">
+            <label>Status</label>
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+            >
+              <option value="">All Statuses</option>
+              <option value="Pending">Pending</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Resolved">Resolved</option>
+            </select>
+          </div>
+          <div className="filter-block">
+            <label>From Date</label>
+            <input
+              type="date"
+              value={filterDateFrom}
+              onChange={(e) => setFilterDateFrom(e.target.value)}
+            />
+          </div>
+          <div className="filter-block">
+            <label>To Date</label>
+            <input
+              type="date"
+              value={filterDateTo}
+              onChange={(e) => setFilterDateTo(e.target.value)}
+            />
+          </div>
+          <div className="filter-block reset-block">
+            <button onClick={() => { setFilterName(''); setFilterStatus(''); setFilterDateFrom(''); setFilterDateTo(''); }}>Reset Filters</button>
+          </div>
+        </div>
+      </div>
+
+      {filteredMessages.length > 0 ? (
         <table className="messages-table">
           <thead>
             <tr>
@@ -124,7 +156,7 @@ const Inquries = [
             </tr>
           </thead>
           <tbody>
-            {Inquries.map((message, index) => (
+            {filteredMessages.map((message, index) => (
               <tr key={message.id}>
                 <td>{index + 1}</td>
                 <td>{message.name}</td>
