@@ -2,20 +2,24 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import './EventPage.css';
-import { useParams , useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const EventPage = () => {
   const { id } = useParams();
   const [events, setEvents] = useState([
     {
-      id: 1, // Example ID for events
+      id: 1,
       title: 'Event 1',
       date: '2024-08-15',
       location: 'New York, NY',
       description: 'This is the description for Event 1.',
+      budget: 5000,
+      status: 'Planned',
+      numGuests: 100,
+      teammate: 'Alice Johnson',
       guests: [
-        { name: 'John', surname: 'Doe', phone: '123-456-7890', confirmation: 'Confirmed' },
-        { name: 'Jane', surname: 'Smith', phone: '098-765-4321', confirmation: 'Pending' }
+        { name: 'John', surname: 'Doe', phone: '123-456-7890', confirmation: 'Confirmed', table: '8' },
+        { name: 'Jane', surname: 'Smith', phone: '098-765-4321', confirmation: 'Pending', table: '2' }
       ],
       tasks: [
         { title: 'Setup Venue', openedBy: 'Alice', lastUpdate: '2024-08-10', status: 'In Progress' },
@@ -34,42 +38,19 @@ const EventPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editingSection, setEditingSection] = useState(null);
   const [editingIndex, setEditingIndex] = useState(null);
-  const [newGuest, setNewGuest] = useState({ name: '', surname: '', phone: '', confirmation: '' });
+  const [newGuest, setNewGuest] = useState({ name: '', surname: '', phone: '', confirmation: '', table: '' });
   const [newTask, setNewTask] = useState({ title: '', openedBy: '', lastUpdate: '', status: '' });
   const [newDescription, setNewDescription] = useState('');
+  const [newBudget, setNewBudget] = useState('');  // New state for budget
+  const [newStatus, setNewStatus] = useState('');  // New state for status
+  const [newNumGuests, setNewNumGuests] = useState('');  // New state for number of guests
+  const [newTeammate, setNewTeammate] = useState('');  // New state for teammate
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   const fetchEvents = async () => {
-  //     const token = Cookies.get('userToken'); // Retrieve the token from cookies
-
-  //     if (token) {
-  //       try {
-  //         const response = await axios.get(`/api/events/${id}`, {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         });
-
-  //         if (response.status === 200) {
-  //           setLoading(false);
-  //           setEvents(response.data);
-  //           setSelectedEvent(response.data[0]); // Select the first event by default
-  //         }
-  //       } catch (error) {
-  //         setError('Failed to load fetch events: ', error);
-  //         setLoading(false);
-  //       }
-  //     } else {
-  //       navigate('/');
-  //     }
-  //   };
-
-  //   fetchEvents();
-  // }, [id]);
+  // Fetch events here with useEffect if needed (commented out for now)
 
   const handleEventSelection = (event) => {
     setSelectedEvent(event);
@@ -100,58 +81,31 @@ const EventPage = () => {
     }
   };
 
-  const handleAddNewRow = (section) => {
-    setEditingSection(section);
-    setIsEditing(true);
-    setEditingIndex(null);
-
-    if (section === 'guests') {
-      setNewGuest({ name: '', surname: '', phone: '', confirmation: '' });
-    } else if (section === 'tasks') {
-      setNewTask({ title: '', openedBy: '', lastUpdate: '', status: '' });
-    }
-  };
 
   const handleCancelEditing = () => {
     setIsEditing(false);
     setEditingSection(null);
     setEditingIndex(null);
-    setNewGuest({ name: '', surname: '', phone: '', confirmation: '' });
+    setNewGuest({ name: '', surname: '', phone: '', confirmation: '', table: '' });
     setNewTask({ title: '', openedBy: '', lastUpdate: '', status: '' });
     setNewDescription('');
-  };
-
-  const handleSaveGuest = async () => {
-    try {
-      let updatedGuests;
-      if (editingIndex !== null) {
-        updatedGuests = [...selectedEvent.guests];
-        updatedGuests[editingIndex] = newGuest;
-      } else {
-        updatedGuests = [...selectedEvent.guests, newGuest];
-      }
-      const updatedEvent = { ...selectedEvent, guests: updatedGuests };
-
-      const response = await axios.put(`https://your-api-endpoint.com/events/${selectedEvent.id}`, updatedEvent, {
-        headers: {
-          Authorization: `Bearer ${Cookies.get('userToken')}`, // Use token from cookies
-        },
-      });
-
-      if (response.status === 200) {
-        setEvents(events.map(event => event.id === selectedEvent.id ? updatedEvent : event));
-        setSelectedEvent(updatedEvent);
-        handleCancelEditing();
-      }
-    } catch (error) {
-      console.error('Error saving the guest:', error);
-    }
+    setNewBudget('');
+    setNewStatus('');
+    setNewNumGuests('');
+    setNewTeammate('');
   };
 
   const handleSaveDetails = async () => {
     try {
-      const updatedEvent = { ...selectedEvent, description: newDescription };
-      
+      const updatedEvent = {
+        ...selectedEvent,
+        description: newDescription,
+        budget: newBudget,
+        status: newStatus,
+        numGuests: newNumGuests,
+        teammate: newTeammate
+      };
+
       const response = await axios.put(`https://your-api-endpoint.com/events/${selectedEvent.id}`, updatedEvent, {
         headers: {
           Authorization: `Bearer ${Cookies.get('userToken')}`, // Use token from cookies
@@ -165,33 +119,6 @@ const EventPage = () => {
       }
     } catch (error) {
       console.error('Error saving the details:', error);
-    }
-  };
-
-  const handleSaveTask = async () => {
-    try {
-      let updatedTasks;
-      if (editingIndex !== null) {
-        updatedTasks = [...selectedEvent.tasks];
-        updatedTasks[editingIndex] = newTask;
-      } else {
-        updatedTasks = [...selectedEvent.tasks, newTask];
-      }
-      const updatedEvent = { ...selectedEvent, tasks: updatedTasks };
-
-      const response = await axios.put(`https://your-api-endpoint.com/events/${selectedEvent.id}`, updatedEvent, {
-        headers: {
-          Authorization: `Bearer ${Cookies.get('userToken')}`, // Use token from cookies
-        },
-      });
-
-      if (response.status === 200) {
-        setEvents(events.map(event => event.id === selectedEvent.id ? updatedEvent : event));
-        setSelectedEvent(updatedEvent);
-        handleCancelEditing();
-      }
-    } catch (error) {
-      console.error('Error saving the task:', error);
     }
   };
 
@@ -212,13 +139,72 @@ const EventPage = () => {
     }
   };
 
-  // if (loading) {
-  //   return <p>Loading...</p>;
-  // }
+  const handleSaveGuest = async () => {
+    try {
+      let updatedGuests;
+      if (editingIndex !== null) {  // Editing an existing guest
+        updatedGuests = [...selectedEvent.guests];
+        updatedGuests[editingIndex] = newGuest;  // Update the existing guest
+      } else {  // Adding a new guest
+        updatedGuests = [...selectedEvent.guests, newGuest];
+      }
+      const updatedEvent = { ...selectedEvent, guests: updatedGuests };
 
-  // if (error) {
-  //   return <p>{error}</p>;
-  // }
+      const response = await axios.put(`https://your-api-endpoint.com/events/${selectedEvent.id}`, updatedEvent, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('userToken')}`, // Use token from cookies
+        },
+      });
+
+      if (response.status === 200) {
+        setEvents(events.map(event => event.id === selectedEvent.id ? updatedEvent : event));
+        setSelectedEvent(updatedEvent);
+        handleCancelEditing();
+      }
+    } catch (error) {
+      console.error('Error saving the guest:', error);
+    }
+  };
+
+  const handleSaveTask = async () => {
+    try {
+      let updatedTasks;
+      if (editingIndex !== null) {  // Editing an existing task
+        updatedTasks = [...selectedEvent.tasks];
+        updatedTasks[editingIndex] = newTask;  // Update the existing task
+      } else {  // Adding a new task
+        updatedTasks = [...selectedEvent.tasks, newTask];
+      }
+      const updatedEvent = { ...selectedEvent, tasks: updatedTasks };
+
+      const response = await axios.put(`https://your-api-endpoint.com/events/${selectedEvent.id}`, updatedEvent, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('userToken')}`, // Use token from cookies
+        },
+      });
+
+      if (response.status === 200) {
+        setEvents(events.map(event => event.id === selectedEvent.id ? updatedEvent : event));
+        setSelectedEvent(updatedEvent);
+        handleCancelEditing();
+      }
+    } catch (error) {
+      console.error('Error saving the task:', error);
+    }
+  };
+
+
+  const handleAddNewRow = (section) => {
+    setEditingSection(section);
+    setIsEditing(true);
+    setEditingIndex(null);
+
+    if (section === 'guests') {
+      setNewGuest({ name: '', surname: '', phone: '', confirmation: '' });
+    } else if (section === 'tasks') {
+      setNewTask({ title: '', openedBy: '', lastUpdate: '', status: '' });
+    }
+  };
 
   return (
     <div className="event-page-container">
@@ -247,23 +233,73 @@ const EventPage = () => {
                 </div>
                 {activeSections.details && (
                   <div className="accordion-content">
-                    {isEditing && editingSection === 'details' ? (
-                      <div>
-                        <textarea
-                          value={newDescription}
-                          onChange={(e) => setNewDescription(e.target.value)}
-                          rows={5}
-                          placeholder="Enter event details"
-                        />
-                        <button onClick={handleSaveDetails} className='save'>Save</button>
-                        <button onClick={handleCancelEditing} className='cancel'>Cancel</button>
-                      </div>
-                    ) : (
-                      <div>
-                        <p>{selectedEvent.description}</p>
-                        <button onClick={() => handleEditSection('details')} class="edit">Edit</button>
-                      </div>
-                    )}
+                    {
+                      isEditing && editingSection === 'details' ? (
+                        <form className="edit-details-form">
+                          <div>
+                            <label>Description</label>
+                            <textarea
+                              value={newDescription}
+                              onChange={(e) => setNewDescription(e.target.value)}
+                              rows={5}
+                              placeholder="Enter event details"
+                            />
+                          </div>
+                          <div>
+                            <label>Budget</label>
+                            <input
+                              type="number"
+                              value={newBudget}
+                              onChange={(e) => setNewBudget(e.target.value)}
+                              placeholder="Enter budget"
+                            />
+                          </div>
+                          <div>
+                            <label>Number of Guests</label>
+                            <input
+                              type="number"
+                              value={newNumGuests}
+                              onChange={(e) => setNewNumGuests(e.target.value)}
+                              placeholder="Number of guests"
+                            />
+                          </div>
+                          <div>
+                            <label>Teammate</label>
+                            <input
+                              type="text"
+                              value={newTeammate}
+                              onChange={(e) => setNewTeammate(e.target.value)}
+                              placeholder="Teammate"
+                            />
+                          </div>
+                          <div>
+                            <label>Status</label>
+                            <select
+                              value={newStatus}
+                              onChange={(e) => setNewStatus(e.target.value)}
+                            >
+                              <option value="Planned">Planned</option>
+                              <option value="Ongoing">Ongoing</option>
+                              <option value="Completed">Completed</option>
+                            </select>
+                          </div>
+                          <div className="button-group">
+                            <button type="button" onClick={handleSaveDetails} className="save">Save</button>
+                            <button type="button" onClick={handleCancelEditing} className="cancel">Cancel</button>
+                          </div>
+                        </form>
+                      ) : (
+                        <div>
+                          <p>Description: {selectedEvent.description}</p>
+                          <p>Budget: ${selectedEvent.budget}</p>
+                          <p>Number of Guests: {selectedEvent.numGuests}</p>
+                          <p>Teammate: {selectedEvent.teammate}</p>
+                          <p>Status: {selectedEvent.status}</p>
+                          <button onClick={() => handleEditSection('details')} className="edit">Edit</button>
+                        </div>
+                      )
+                    }
+
                   </div>
                 )}
               </div>
@@ -281,6 +317,7 @@ const EventPage = () => {
                           <th>Surname</th>
                           <th>Phone</th>
                           <th>Confirmation</th>
+                          <th>Table</th>
                           <th>Actions</th>
                         </tr>
                       </thead>
@@ -298,10 +335,11 @@ const EventPage = () => {
                                     <option value="Pending">Pending</option>
                                   </select>
                                 </td>
+                                <td><input type="text" name="table" value={newGuest.table} onChange={(e) => setNewGuest({ ...newGuest, table: e.target.value })} placeholder="Table Number" /></td> {/* New input for table number */}
                                 <td>
-                                <button onClick={handleSaveDetails} className='save'>Save</button>
-                                <button onClick={handleCancelEditing} className='cancel'>Cancel</button>
-                                  </td>
+                                  <button onClick={handleSaveGuest} className='save'>Save</button>
+                                  <button onClick={handleCancelEditing} className='cancel'>Cancel</button>
+                                </td>
                               </>
                             ) : (
                               <>
@@ -309,8 +347,9 @@ const EventPage = () => {
                                 <td>{guest.surname}</td>
                                 <td>{guest.phone}</td>
                                 <td>{guest.confirmation}</td>
+                                <td>{guest.table}</td>
                                 <td>
-                                  <button onClick={() => handleEditSection('guests', index)} class="edit">Edit</button>
+                                  <button onClick={() => handleEditSection('guests', index)} className="edit">Edit</button>
                                 </td>
                               </>
                             )}
@@ -327,18 +366,20 @@ const EventPage = () => {
                                 <option value="Pending">Pending</option>
                               </select>
                             </td>
+                            <td><input type="text" name="table" value={newGuest.table} onChange={(e) => setNewGuest({ ...newGuest, table: e.target.value })} placeholder="Table Number" /></td> {/* New input for table number */}
                             <td>
-                            <button onClick={handleSaveDetails} className='save'>Save</button>
-                            <button onClick={handleCancelEditing} className='cancel'>Cancel</button>
-                              </td>
+                              <button onClick={handleSaveGuest} className='save'>Save</button>
+                              <button onClick={handleCancelEditing} className='cancel'>Cancel</button>
+                            </td>
                           </tr>
                         )}
                       </tbody>
                     </table>
-                    {!isEditing && <button onClick={() => handleAddNewRow('guests')} class="edit">Add Guest</button>}
+                    {!isEditing && <button onClick={() => handleAddNewRow('guests')} className="edit">Add Guest</button>}
                   </div>
                 )}
               </div>
+
               <div className="accordion-section">
                 <div className="accordion-header" onClick={() => toggleSection('tasks')}>
                   Tasks
@@ -371,9 +412,9 @@ const EventPage = () => {
                                   </select>
                                 </td>
                                 <td>
-                                <button onClick={handleSaveDetails} className='save'>Save</button>
-                                <button onClick={handleCancelEditing} className='cancel'>Cancel</button>
-                                  </td>
+                                  <button onClick={handleSaveTask} className='save'>Save</button>
+                                  <button onClick={handleCancelEditing} className='cancel'>Cancel</button>
+                                </td>
                               </>
                             ) : (
                               <>
@@ -382,7 +423,7 @@ const EventPage = () => {
                                 <td>{task.lastUpdate}</td>
                                 <td>{task.status}</td>
                                 <td>
-                                  <button onClick={() => handleEditSection('tasks', index)} class="edit">Edit</button>
+                                  <button onClick={() => handleEditSection('tasks', index)} className="edit">Edit</button>
                                 </td>
                               </>
                             )}
@@ -400,14 +441,14 @@ const EventPage = () => {
                               </select>
                             </td>
                             <td>
-                            <button onClick={handleSaveDetails} className='save'>Save</button>
-                            <button onClick={handleCancelEditing} className='cancel'>Cancel</button>
-                              </td>
+                              <button onClick={handleSaveTask} className='save'>Save</button>
+                              <button onClick={handleCancelEditing} className='cancel'>Cancel</button>
+                            </td>
                           </tr>
                         )}
                       </tbody>
                     </table>
-                    {!isEditing && <button onClick={() => handleAddNewRow('tasks')} class="edit">Add Task</button>}
+                    {!isEditing && <button onClick={() => handleAddNewRow('tasks')} className="edit">Add Task</button>}
                   </div>
                 )}
               </div>
