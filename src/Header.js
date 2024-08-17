@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Header.css';
 import Cookies from 'js-cookie';
@@ -8,10 +8,27 @@ const Header = () => {
   const token = Cookies.get('userToken');
   const userName = Cookies.get('userName'); // Assuming the user's name is stored in a cookie
 
+  const [showDropdown, setShowDropdown] = useState(false);
+
   const handleSignOut = () => {
     Cookies.remove('userToken');
     Cookies.remove('userName');
     navigate('/login');
+  };
+
+  const toggleDropdown = () => {
+    setShowDropdown((prev) => !prev);
+  };
+
+  const handleCategorySelect = (category) => {
+    if (category == 'All') {
+      navigate(`/services`);
+    }
+    else {
+      navigate(`/services?category=${category}`);
+    }
+    navigate(0);
+    setShowDropdown(false);
   };
 
   return (
@@ -21,7 +38,21 @@ const Header = () => {
         <nav className="header-nav">
           <Link to="/">Home</Link>
           <Link to="/events">Events</Link>
-          <Link to="/services">Services</Link>
+          <div className="dropdown">
+            <button className="dropdown-button" onClick={toggleDropdown}>
+              Services
+            </button>
+            {showDropdown && (
+              <div className="dropdown-menu">
+                <button onClick={() => handleCategorySelect('All')}>All</button>
+                <button onClick={() => handleCategorySelect('Catering')}>Catering</button>
+                <button onClick={() => handleCategorySelect('Decoration')}>Decoration</button>
+                <button onClick={() => handleCategorySelect('Music')}>Music</button>
+                <button onClick={() => handleCategorySelect('Photography')}>Photography</button>
+                <button onClick={() => handleCategorySelect('Hall')}>Hall</button>
+              </div>
+            )}
+          </div>
           <Link to="/my-profile">Profile</Link>
         </nav>
       </div>

@@ -1,9 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ServicesPage.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const ServicesPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const queryParams = new URLSearchParams(location.search);
+  const initialCategory = queryParams.get('category') || '';
+
+  const [category, setCategory] = useState(initialCategory);
+  const [locationFilter, setLocationFilter] = useState('');
+  const [rating, setRating] = useState('');
+  const [searchTerm, setSearchTerm] = useState(''); // New state for the free text search
 
   // Example data, you can replace this with dynamic data fetching
   const allServices = [
@@ -54,11 +63,6 @@ const ServicesPage = () => {
     },
   ];
 
-  const [category, setCategory] = useState('');
-  const [location, setLocation] = useState('');
-  const [rating, setRating] = useState('');
-  const [searchTerm, setSearchTerm] = useState(''); // New state for the free text search
-
   const handleMoreInfoClick = (id) => {
     navigate(`/profile/${id}`);
   };
@@ -66,7 +70,7 @@ const ServicesPage = () => {
   const filteredServices = allServices.filter((service) => {
     return (
       (category === '' || service.category === category) &&
-      (location === '' || service.location === location) &&
+      (locationFilter === '' || service.location === locationFilter) &&
       (rating === '' || service.rating >= parseFloat(rating)) &&
       (searchTerm === '' || service.title.toLowerCase().includes(searchTerm.toLowerCase())) // Filtering by search term
     );
@@ -109,7 +113,7 @@ const ServicesPage = () => {
         </select>
 
         <h4>Location</h4>
-        <select value={location} onChange={(e) => setLocation(e.target.value)}>
+        <select value={locationFilter} onChange={(e) => setLocationFilter(e.target.value)}>
           <option value="">All</option>
           <option value="Tel Aviv">Tel Aviv</option>
           <option value="Jerusalem">Jerusalem</option>
