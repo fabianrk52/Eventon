@@ -126,7 +126,7 @@ const PublicProfile = () => {
                 required
               />
               <div className="contact-form-buttons">
-                <button type="button" className="cancel-button" onClick={() => setShowContactForm(false)}>Cancel</button>
+                <button type="button" className="cancel-button-contact" onClick={() => setShowContactForm(false)}>Cancel</button>
                 <button type="submit" className="submit-button">Send</button>
               </div>
             </form>
