@@ -183,7 +183,7 @@ const SupplierMessagesPage = () => {
                 <td>{index + 1}</td>
                 <td>{message.name}</td>
                 <td>{message.email}</td>
-                <td>{message.phone}</td>
+                <td className='phone-cell'>{message.phone}</td>
                 <td>{message.message}</td>
                 <td>{new Date(message.date).toLocaleDateString()}</td>
                 <td>

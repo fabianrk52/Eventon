@@ -150,6 +150,10 @@
   cursor: pointer;
 }
 
+.phone-cell {
+  width: 150px; /* Adjust phone number cell width */
+}
+
 .export-section button:hover {
   background-color: #218838;
 }
