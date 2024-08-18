@@ -13,10 +13,12 @@ const PublicProfile = () => {
     email: '',
     phoneNumber: '',
     bio: '',
+    category: '', // New field for category
+    reviews: '',  // New field for reviews
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showContactForm, setShowContactForm] = useState(false); // State to control popup visibility
+  const [showContactForm, setShowContactForm] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -26,20 +28,22 @@ const PublicProfile = () => {
 
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   const fetchUserData = async () => {
-  //     try {
-  //       const response = await axios.get(`/api/user-profile/${id}`); // Replace with your actual API endpoint
-  //       setUserData(response.data);
-  //       setLoading(false);
-  //     } catch (err) {
-  //       setError('Failed to load user data');
-  //       setLoading(false);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`/api/user-profile/${id}`); // Replace with your actual API endpoint
+        setUserData(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError('Failed to load user data');
+        setLoading(false);
+      }
+    };
 
-  //   fetchUserData();
-  // }, [id]);
+    if (id) {
+      fetchUserData();
+    }
+  }, [id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -50,7 +54,7 @@ const PublicProfile = () => {
     e.preventDefault();
     try {
       await axios.post(`/api/send-request/${id}`, formData); // Replace with your actual API endpoint
-      setShowContactForm(false); // Close the popup after submission
+      setShowContactForm(false);
       alert('Your request has been sent!');
     } catch (err) {
       alert('Failed to send your request');
@@ -78,12 +82,13 @@ const PublicProfile = () => {
         <p><strong>Email:</strong> {userData.email}</p>
         <p><strong>Phone:</strong> {userData.phoneNumber}</p>
         <p><strong>Bio:</strong> {userData.bio}</p>
+        <p><strong>Category:</strong> {userData.category}</p> {/* Display category */}
+        <p><strong>Reviews:</strong> {userData.reviews}</p> {/* Display reviews */}
         <button onClick={() => setShowContactForm(true)} className="contact-button">
           Contact
         </button>
       </div>
 
-      {/* Contact Form Popup */}
       {showContactForm && (
         <div className="contact-form-overlay">
           <div className="contact-form-container">

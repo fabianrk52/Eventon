@@ -6,21 +6,20 @@ body {
 }
 
 .public-profile-container {
-  max-width: 100vh;
-  margin: 0 auto;
+  max-width: 900px;
+  margin: 40px auto;
   padding: 20px;
   background-color: white;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
 
 .cover-photo-container {
   width: 100%;
-  height: 30vh;
+  height: 200px;
   background-color: #ddd;
   overflow: hidden;
   border-radius: 8px 8px 0 0;
-  position: relative;
 }
 
 .cover-photo {
@@ -31,15 +30,14 @@ body {
 
 .profile-photo-container {
   position: relative;
-  bottom: 10vh;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 120px;
-  height: 120px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   overflow: hidden;
   border: 5px solid white;
   background-color: white;
+  margin: -75px auto 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .profile-photo {
@@ -50,67 +48,38 @@ body {
 
 .personal-info-container {
   text-align: center;
+  padding: 0 20px;
 }
 
 .personal-info-container h2 {
-  margin-top: 10px;
   margin-bottom: 10px;
-  font-size: 24px;
   color: #333;
 }
 
 .personal-info-container p {
-  margin: 5px 0;
-  font-size: 16px;
+  margin: 8px 0;
   color: #555;
+  text-align: left;
 }
 
-.edit-profile-icon {
-  font-size: 24px;
-  color: black;
-  cursor: pointer;
-  position: relative;
-  top: 1vh;
-}
-
-.edit-profile-icon:hover {
-  color: #7bb0e0;
-}
-
-.free-text-container {
-  margin-top: 40px;
-}
-
-.free-text-container h3 {
-  margin-bottom: 10px;
-  font-size: 18px;
+.personal-info-container strong {
   color: #333;
 }
 
-.free-text {
-  width: 100%;
-  height: 150px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-family: inherit;
-  font-size: 16px;
-  box-sizing: border-box;
-}
-
 .contact-button {
-  background-color: #007bff;
+  background-color: #28a745;
   color: white;
   border: none;
-  padding: 10px 20px;
+  padding: 12px 20px;
   font-size: 16px;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 4px;
+  width: 100%;
   margin-top: 20px;
 }
 
 .contact-button:hover {
-  background-color: #0056b3;
+  background-color: #218838;
 }
 
 .contact-form-overlay {
@@ -119,60 +88,51 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
 }
 
 .contact-form-container {
-  background: white;
+  background-color: white;
   padding: 20px;
-  border-radius: 10px;
-  width: 400px;
-  max-width: 80%;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
 }
 
 .contact-form-container h3 {
-  margin-top: 0;
   margin-bottom: 20px;
   text-align: center;
 }
 
 .contact-form-container label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
   font-weight: bold;
+  color: #333;
 }
 
 .contact-form-container input,
 .contact-form-container textarea {
-  width: 95%;
+  width: 100%;
   padding: 10px;
   margin-bottom: 20px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.contact-form-container textarea {
+  resize: vertical;
 }
 
 .contact-form-buttons {
   display: flex;
   justify-content: space-between;
-}
-
-.submit-button {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.submit-button:hover {
-  background-color: #218838;
 }
 
 .cancel-button {
@@ -182,9 +142,25 @@ body {
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 4px;
+  width: 48%;
 }
 
 .cancel-button:hover {
   background-color: #c82333;
+}
+
+.submit-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  width: 48%;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
 }
