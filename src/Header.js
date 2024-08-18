@@ -21,7 +21,7 @@ const Header = () => {
   };
 
   const handleCategorySelect = (category) => {
-    if (category == 'All') {
+    if (category === 'All') {
       navigate(`/services`);
     }
     else {
@@ -54,7 +54,7 @@ const Header = () => {
             )}
           </div>
           <Link to="/my-profile">Profile</Link>
-          <Link to="/supplier-messages" className="header-messages-link">Messages</Link> {/* New Link */}
+          <Link to="/supplier-messages" className="header-messages-link">Inquiries</Link> {/* New Link */}
         </nav>
       </div>
       <div className="header-user-container">

@@ -200,7 +200,7 @@ const SupplierMessagesPage = () => {
                     <span>{message.status}</span>
                   )}
                 </td>
-                <td>
+                <td className="actions-cell">
                   {editingStatusId === message.id ? (
                     <>
                       <button
@@ -221,7 +221,7 @@ const SupplierMessagesPage = () => {
                       onClick={() => handleEditStatus(message.id, message.status)}
                       className="edit-button"
                     >
-                      Edit Status
+                      Edit
                     </button>
                   )}
                 </td>
