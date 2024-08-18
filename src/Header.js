@@ -53,7 +53,7 @@ const Header = () => {
               </div>
             )}
           </div>
-          <Link to="/my-profile">Profile</Link>
+          <Link to="/my-profile">My Profile</Link>
           <Link to="/supplier-messages" className="header-messages-link">Inquiries</Link> {/* New Link */}
         </nav>
       </div>
