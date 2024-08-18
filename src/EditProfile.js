@@ -9,8 +9,8 @@ const EditProfile = () => {
   const { id } = useParams();
 
   const [formData, setFormData] = useState({
-    coverPhoto: '',
-    profilePhoto: '',
+    coverPhoto: '/cover-profile.jpg',
+    profilePhoto: '/dslr-camera.png',
     name: '',
     email: '',
     phoneNumber: '',
@@ -22,11 +22,11 @@ const EditProfile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [categories, setCategories] = useState([
-    {'value':"Catering",'name':"Catering"},
-    {'value':"Decoration",'name':"Decoration"},
-    {'value':"Music",'name':"Music"},
-    {'value':"Photography",'name':"Photography"},
-    {'value':"Hall",'name':"Hall"},
+    { 'value': "Catering", 'name': "Catering" },
+    { 'value': "Decoration", 'name': "Decoration" },
+    { 'value': "Music", 'name': "Music" },
+    { 'value': "Photography", 'name': "Photography" },
+    { 'value': "Hall", 'name': "Hall" },
   ]);
 
   useEffect(() => {
@@ -51,18 +51,18 @@ const EditProfile = () => {
       }
     };
 
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get('/api/categories'); // Replace with your actual categories API endpoint
-        setCategories(response.data);
-      } catch (err) {
-        setError('Failed to load categories.');
-      }
-    };
-
     fetchUserData();
-    fetchCategories();
   }, [id]);
+
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+    const file = files[0];
+    // Handle file upload logic here (e.g., preview, uploading to server, etc.)
+    setFormData({
+      ...formData,
+      [name]: URL.createObjectURL(file), // Preview the image locally
+    });
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -93,9 +93,33 @@ const EditProfile = () => {
     <div className="edit-profile-container">
       <div className="cover-photo-container">
         <img src={formData.coverPhoto} alt="Cover" className="cover-photo" />
+        <div className="upload-icon cover-upload">
+          <label htmlFor="coverPhotoUpload">
+            <i class="fa-solid fa-upload"></i>
+          </label>
+          <input
+            type="file"
+            id="coverPhotoUpload"
+            name="coverPhoto"
+            accept="image/*"
+            onChange={handleFileChange}
+          />
+        </div>
       </div>
       <div className="profile-photo-container">
         <img src={formData.profilePhoto} alt="Profile" className="profile-photo" />
+        <div className="upload-icon profile-upload">
+          <label htmlFor="profilePhotoUpload">
+            <i class="fa-solid fa-upload"></i>
+          </label>
+          <input
+            type="file"
+            id="profilePhotoUpload"
+            name="profilePhoto"
+            accept="image/*"
+            onChange={handleFileChange}
+          />
+        </div>
       </div>
       <div className="personal-info-container">
         <label>Name</label>
