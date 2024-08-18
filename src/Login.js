@@ -52,8 +52,8 @@ const Login = () => {
         <button className="forgot-password">Forgot password?</button>
         <p>Or continue with:</p>
         <div className="social-login">
-          <i class="fa-brands fa-facebook"></i>
-          <i class="fa-brands fa-google google"></i>
+          <i class="fa-brands fa-facebook fa-xl"></i>
+          <i class="fa-brands fa-google google fa-xl"></i>
         </div>
         <p>Not a member yet? <a href="/signup" className="signup-link">Sign up</a></p>
       </div>
