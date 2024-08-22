@@ -1,0 +1,97 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #e0f2ff; /* Lighter version of #8dc2fa */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+  }
+  
+  .new-event-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+  }
+  
+  .new-event-box {
+    background-color: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 500px;
+    text-align: center;
+  }
+  
+  .new-event-box h2 {
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #8dc2fa; /* Main color */
+  }
+  
+  .new-event-box form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .new-event-box label {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 5px;
+    text-align: left;
+    width: 100%;
+  }
+  
+  .input-field, .textarea-field, .select-field {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  .textarea-field {
+    height: 100px;
+    resize: vertical;
+  }
+  
+  .new-event-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #8dc2fa; /* Main color */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 16px;
+  }
+  
+  .new-event-button:hover {
+    background-color: #6ea7e0; /* Darker hover color */
+  }
+  
+  .cancel-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #ccc;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+  }
+  
+  .cancel-button:hover {
+    background-color: #b3b3b3;
+  }
+  
+  @media (max-width: 600px) {
+    .new-event-box {
+      width: 90%;
+    }
+  }
+  
