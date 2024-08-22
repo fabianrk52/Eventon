@@ -161,7 +161,7 @@ const EventPage = () => {
 
   const handleDeleteEvent = async () => {
     try {
-      const response = await axios.delete(`http://localhost:65000/.com/events/${selectedEvent.id}`, {
+      const response = await axios.delete(`http://localhost:65000/events/${selectedEvent.id}`, {
         headers: {
           Authorization: `Bearer ${Cookies.get('userToken')}`, // Use token from cookies
         },
@@ -204,6 +204,8 @@ const EventPage = () => {
       }
 
       if (response.status === 200 || response.status === 201) {
+        await fetchUpdatedEvent(selectedEvent.id);
+
         const updatedEvent = { ...selectedEvent, guests: updatedGuests };
         setEvents(events.map(event => event.id === selectedEvent.id ? updatedEvent : event));
         setSelectedEvent(updatedEvent);
@@ -217,16 +219,21 @@ const EventPage = () => {
 
   const handleDeleteGuest = async (index) => {
     try {
-      const updatedGuests = selectedEvent.guests.filter((_, i) => i !== index);
-      const updatedEvent = { ...selectedEvent, guests: updatedGuests };
-
-      const response = await axios.put(`https://your-api-endpoint.com/events/${selectedEvent.id}`, updatedEvent, {
+      const guestId = selectedEvent.guests[index].id;  // Get the guest ID
+      const response = await axios.delete(`http://localhost:65000/events/${selectedEvent.id}/guests/${guestId}`, {
         headers: {
-          Authorization: `Bearer ${Cookies.get('userToken')}`, // Use token from cookies
+          Authorization: `Bearer ${Cookies.get('userToken')}`,  // Use token from cookies
         },
       });
 
       if (response.status === 200) {
+        await fetchUpdatedEvent(selectedEvent.id);
+
+        // Update the state to remove the guest
+        const updatedGuests = selectedEvent.guests.filter((_, i) => i !== index);
+        const updatedEvent = { ...selectedEvent, guests: updatedGuests };
+
+        // Update the state for both selectedEvent and events array
         setEvents(events.map(event => event.id === selectedEvent.id ? updatedEvent : event));
         setSelectedEvent(updatedEvent);
       }
@@ -234,6 +241,7 @@ const EventPage = () => {
       console.error('Error deleting the guest:', error);
     }
   };
+
 
   const handleSaveTask = async () => {
     try {
@@ -263,6 +271,8 @@ const EventPage = () => {
       }
 
       if (response.status === 200 || response.status === 201) {
+        await fetchUpdatedEvent(selectedEvent.id);
+
         const updatedEvent = { ...selectedEvent, tasks: updatedTasks };
         setEvents(events.map(event => event.id === selectedEvent.id ? updatedEvent : event));
         setSelectedEvent(updatedEvent);
@@ -284,6 +294,8 @@ const EventPage = () => {
       });
 
       if (response.status === 200) {
+        await fetchUpdatedEvent(selectedEvent.id);
+
         const updatedTasks = selectedEvent.tasks.filter((_, i) => i !== index);
         const updatedEvent = { ...selectedEvent, tasks: updatedTasks };
         setEvents(events.map(event => event.id === selectedEvent.id ? updatedEvent : event));
@@ -291,6 +303,24 @@ const EventPage = () => {
       }
     } catch (error) {
       console.error('Error deleting the task:', error);
+    }
+  };
+
+  const fetchUpdatedEvent = async (eventId) => {
+    try {
+      const response = await axios.get(`http://localhost:65000/events-with-details/${eventId}`, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('userToken')}`, // Use token from cookies
+        },
+      });
+      const updatedEvent = response.data;
+
+      // Update the event in the global events array
+      setEvents(events.map(event => event.id === eventId ? updatedEvent : event));
+      // Set the selected event to the updated event
+      setSelectedEvent(updatedEvent);
+    } catch (error) {
+      console.error('Error fetching updated event:', error);
     }
   };
 
