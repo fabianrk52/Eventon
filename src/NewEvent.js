@@ -20,7 +20,7 @@ const NewEvent = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post('/api/events', {
+            const response = await axios.post('http://localhost:65000/add_event', {
                 title,
                 date,
                 location,
@@ -28,7 +28,7 @@ const NewEvent = () => {
                 budget,
                 status,
                 numGuests,
-                teammate
+                teammate,
             }, {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('userToken')}`
@@ -48,36 +48,36 @@ const NewEvent = () => {
     return (
         <div className="new-event-container">
             <h2>Create New Event</h2>
-            <form onSubmit={handleCreateEvent}>
-                <div>
+            <form onSubmit={handleCreateEvent} className="new-event-form">
+                <div className="form-row">
                     <label>Title</label>
                     <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
                 </div>
-                <div>
+                <div className="form-row">
                     <label>Date</label>
                     <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
                 </div>
-                <div>
+                <div className="form-row">
                     <label>Location</label>
                     <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} required />
                 </div>
-                <div>
+                <div className="form-row">
                     <label>Description</label>
                     <textarea value={description} onChange={(e) => setDescription(e.target.value)} required></textarea>
                 </div>
-                <div>
+                <div className="form-row">
                     <label>Budget</label>
                     <input type="number" value={budget} onChange={(e) => setBudget(e.target.value)} required />
                 </div>
-                <div>
+                <div className="form-row">
                     <label>Number of Guests</label>
                     <input type="number" value={numGuests} onChange={(e) => setNumGuests(e.target.value)} required />
                 </div>
-                <div>
+                <div className="form-row">
                     <label>Teammate</label>
                     <input type="text" value={teammate} onChange={(e) => setTeammate(e.target.value)} />
                 </div>
-                <div>
+                <div className="form-row">
                     <label>Status</label>
                     <select value={status} onChange={(e) => setStatus(e.target.value)}>
                         <option value="Planned">Planned</option>
@@ -85,7 +85,7 @@ const NewEvent = () => {
                         <option value="Completed">Completed</option>
                     </select>
                 </div>
-                <button type="submit">Create Event</button>
+                <button type="submit" className="new-event-button">Create Event</button>
             </form>
         </div>
     );

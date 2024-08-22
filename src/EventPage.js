@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import './EventPage.css';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import NewEvent from './NewEvent';
 
 const EventPage = () => {
-  const { id } = useParams();
   const [events, setEvents] = useState([
     {
       event_id: '',
