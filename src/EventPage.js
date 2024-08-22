@@ -34,7 +34,7 @@ const EventPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editingSection, setEditingSection] = useState(null);
   const [editingIndex, setEditingIndex] = useState(null);
-  const [newGuest, setNewGuest] = useState({ name: '', surname: '', phone: '', confirmation: '', table: '' });
+  const [newGuest, setNewGuest] = useState({ name: '', surname: '', phone: '', confirmation: 'Pending', table: '' });
   const [newTask, setNewTask] = useState({ title: '', description: '', deadline: '', priority: '', teammate: '', status: '' });
   const [newDescription, setNewDescription] = useState('');
   const [newTitle, setNewTitle] = useState('');  // New state for title
@@ -117,7 +117,7 @@ const EventPage = () => {
     setIsEditing(false);
     setEditingSection(null);
     setEditingIndex(null);
-    setNewGuest({ name: '', surname: '', phone: '', confirmation: '', table: '' });
+    setNewGuest({ name: '', surname: '', phone: '', confirmation: 'Pending', table: '' });
     setNewTask({ title: '', description: '', deadline: '', priority: '', teammate: '', status: '' });
     setNewTitle('');
     setNewDate('');
@@ -143,7 +143,7 @@ const EventPage = () => {
         teammate: newTeammate
       };
 
-      const response = await axios.put(`https://your-api-endpoint.com/events/${selectedEvent.id}`, updatedEvent, {
+      const response = await axios.put(`http://localhost:65000/events/${selectedEvent.id}`, updatedEvent, {
         headers: {
           Authorization: `Bearer ${Cookies.get('userToken')}`, // Use token from cookies
         },
@@ -161,7 +161,7 @@ const EventPage = () => {
 
   const handleDeleteEvent = async () => {
     try {
-      const response = await axios.delete(`https://your-api-endpoint.com/events/${selectedEvent.id}`, {
+      const response = await axios.delete(`http://localhost:65000/.com/events/${selectedEvent.id}`, {
         headers: {
           Authorization: `Bearer ${Cookies.get('userToken')}`, // Use token from cookies
         },
@@ -176,24 +176,35 @@ const EventPage = () => {
     }
   };
 
+
   const handleSaveGuest = async () => {
     try {
       let updatedGuests;
-      if (editingIndex !== null) {  // Editing an existing guest
+      let response;
+
+      if (editingIndex !== null) {
+        // Editing an existing guest
         updatedGuests = [...selectedEvent.guests];
-        updatedGuests[editingIndex] = newGuest;  // Update the existing guest
-      } else {  // Adding a new guest
-        updatedGuests = [...selectedEvent.guests, newGuest];
+        updatedGuests[editingIndex] = newGuest; // Update the existing guest
+
+        response = await axios.put(`http://localhost:65000/events/${selectedEvent.id}/guests/${selectedEvent.guests[editingIndex].id}`, newGuest, {
+          headers: {
+            Authorization: `Bearer ${Cookies.get('userToken')}`, // Use token from cookies
+          },
+        });
+
+      } else {
+        response = await axios.post(`http://localhost:65000/events/${selectedEvent.id}/guests`, newGuest, {
+          headers: {
+            Authorization: `Bearer ${Cookies.get('userToken')}`, // Use token from cookies
+          },
+        });
+
+        updatedGuests = [...selectedEvent.guests, response.data];
       }
-      const updatedEvent = { ...selectedEvent, guests: updatedGuests };
 
-      const response = await axios.put(`https://your-api-endpoint.com/events/${selectedEvent.id}`, updatedEvent, {
-        headers: {
-          Authorization: `Bearer ${Cookies.get('userToken')}`, // Use token from cookies
-        },
-      });
-
-      if (response.status === 200) {
+      if (response.status === 200 || response.status === 201) {
+        const updatedEvent = { ...selectedEvent, guests: updatedGuests };
         setEvents(events.map(event => event.id === selectedEvent.id ? updatedEvent : event));
         setSelectedEvent(updatedEvent);
         handleCancelEditing();
@@ -202,6 +213,7 @@ const EventPage = () => {
       console.error('Error saving the guest:', error);
     }
   };
+
 
   const handleDeleteGuest = async (index) => {
     try {
@@ -276,7 +288,7 @@ const EventPage = () => {
     setEditingIndex(null);
 
     if (section === 'guests') {
-      setNewGuest({ name: '', surname: '', phone: '', confirmation: '', table: '' });
+      setNewGuest({ name: '', surname: '', phone: '', confirmation: 'Pending', table: '' });
     } else if (section === 'tasks') {
       setNewTask({ title: '', description: '', openedBy: '', deadline: '', priority: '', teammate: '', status: '' });
     }
@@ -437,8 +449,8 @@ const EventPage = () => {
                                     <td><input type="text" name="phone" value={newGuest.phone} onChange={(e) => setNewGuest({ ...newGuest, phone: e.target.value })} placeholder="Phone" /></td>
                                     <td>
                                       <select name="confirmation" value={newGuest.confirmation} onChange={(e) => setNewGuest({ ...newGuest, confirmation: e.target.value })}>
-                                        <option value="Confirmed">Confirmed</option>
                                         <option value="Pending">Pending</option>
+                                        <option value="Confirmed">Confirmed</option>
                                       </select>
                                     </td>
                                     <td><input type="text" name="table" value={newGuest.table} onChange={(e) => setNewGuest({ ...newGuest, table: e.target.value })} placeholder="Table Number" /></td>

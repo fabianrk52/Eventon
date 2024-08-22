@@ -12,7 +12,7 @@ const MyProfile = () => {
     coverPhoto: '',
     profilePhoto: '',
     first_name: '',
-    last_name:'',
+    last_name: '',
     email: '',
     phone_number: '',
     bio: '',
@@ -26,7 +26,11 @@ const MyProfile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`http://localhost:65000/user-profile/${userID}`); // Replace with your actual API endpoint
+        const response = await axios.get(`http://localhost:65000/user-profile/${userID}`, {
+          headers: {
+            Authorization: `Bearer ${Cookies.get('userToken')}`  // Use token from cookies
+          }
+        });
         setUserData(response.data);
         setLoading(false);
       } catch (err) {
@@ -42,13 +46,13 @@ const MyProfile = () => {
     navigate(`/edit-profile`); // Navigate to the EditProfile page
   };
 
-//   if (loading) {
-//     return <p>Loading...</p>;
-//   }
+  //   if (loading) {
+  //     return <p>Loading...</p>;
+  //   }
 
-//   if (error) {
-//     return <p>{error}</p>;
-//   }
+  //   if (error) {
+  //     return <p>{error}</p>;
+  //   }
 
   return (
     <div className="my-profile-container">

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './ServicesPage.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const ServicesPage = () => {
   const navigate = useNavigate();
@@ -22,7 +23,11 @@ const ServicesPage = () => {
   useEffect(() => {
     const fetchSuppliers = async () => {
       try {
-        const response = await axios.get('http://localhost:65000/suppliers');
+        const response = await axios.get('http://localhost:65000/suppliers', {
+          headers: {
+            Authorization: `Bearer ${Cookies.get('userToken')}`  // Use token from cookies
+          }
+        });
         setSuppliers(response.data);
         setLoading(false);
       } catch (err) {

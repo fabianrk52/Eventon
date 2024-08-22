@@ -31,7 +31,11 @@ const EditProfile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`http://localhost:65000/user-profile/${userID}`); // Replace with your actual API endpoint
+        const response = await axios.get(`http://localhost:65000/user-profile/${userID}`, {
+          headers: {
+            Authorization: `Bearer ${Cookies.get('userToken')}`  // Use token from cookies
+          }
+        });
         const userData = response.data;
         setFormData({
           coverPhoto: userData.coverPhoto || 'default-cover.jpg',
