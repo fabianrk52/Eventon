@@ -13,14 +13,14 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    navigate('/login-2fa');
     try {
-      const response = await axios.post('/api/login', { email, password });
+      const response = await axios.post('http://localhost:65000/login', { email, password });
       if (response.status === 200) {
         const token = response.data.token;
         Cookies.set('userToken', token, { expires: 7 });
-
-        // Redirect to the public profile page
+        Cookies.set('userId', response.data.userId, { expires: 7 });
+        console.log(token);
+        console.log(response.data.userId);
         navigate('/login-2fa');
       } else {
         setMessage('Invalid login credentials.');

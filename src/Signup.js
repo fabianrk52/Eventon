@@ -6,16 +6,15 @@ import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 
 
-
 const Signup = () => {
   const [formData, setFormData] = useState({
-    role: '',
+    role: 'EventPlanner',
     firstName: '',
     lastName: '',
     phoneNumber: '',
     email: '',
     password: '',
-    supplierCategory: ''
+    supplierCategory: 'None'
   });
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
@@ -27,24 +26,27 @@ const Signup = () => {
       ...formData,
       [name]: value
     });
+    console.log(formData);
   };
 
   const handleSignup = async () => {
-    // Redirect to the 2FA page
-    navigate('/signup-2fa');
+    const { role, firstName, lastName, phoneNumber, email, password, supplierCategory } = formData;
+
+    if (!role || !firstName || !lastName || !phoneNumber || !email || !password || (role === "Supplier" && !supplierCategory)) {
+      setMessage('Please complete all fields.');
+      return;
+    }
+  
+    console.log(formData);
     try {
-      const response = await axios.post('/api/signup', { formData });
+      const response = await axios.post('http://localhost:65000/register', formData);
       if (response.status === 200) {
         const token = response.data.token;
 
-        // Store the token in a cookie
-        // Cookies.set('userToken', token, { expires: 7 });
-
-        // Redirect to the 2FA page
         navigate('/signup-2fa');
-
-      } else {
-        setMessage('Invalid login credentials.');
+      }
+      if (response.status === 201) {
+        setMessage(`${response.message}`);
       }
     } catch (error) {
       setMessage('Login failed. Please check your credentials.');
@@ -72,7 +74,7 @@ const Signup = () => {
             onChange={handleChange}
             className="select-field"
           >
-            <option value="">Choose Supplier Category</option>
+            <option value="None">Choose Supplier Category</option>
             <option value="Catering">Catering</option>
             <option value="Decoration">Decoration</option>
             <option value="Music">Music</option>

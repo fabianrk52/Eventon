@@ -30,7 +30,6 @@ body {
   
   .signup-box p {
     margin: 5px 0 20px 0;
-    color: #666;
   }
   
   .input-field, .select-field {
@@ -73,5 +72,11 @@ body {
     right: 20px;
     width: 60px;
     height: auto;
+  }
+
+  .message {
+    text-align: center;
+    color: red;
+    margin-top: 10px;
   }
   
