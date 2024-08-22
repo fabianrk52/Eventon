@@ -14,13 +14,13 @@ const EditProfile = () => {
     email: '',
     phone_number: '',
     bio: '',
-    supplierCategory: '',
+    supplier_category: '',
     reviews: '', // Read-only reviews field
   });
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [supplierCategory, setCategories] = useState([
+  const [supplier_category, setCategories] = useState([
     { 'value': "Catering", 'name': "Catering" },
     { 'value': "Decoration", 'name': "Decoration" },
     { 'value': "Music", 'name': "Music" },
@@ -41,7 +41,7 @@ const EditProfile = () => {
           email: userData.email || '',
           phone_number: userData.phoneNumber || '',
           bio: userData.bio || '',
-          supplierCategory: userData.supplierCategory || '',
+          supplier_category: userData.supplier_category || '',
           reviews: userData.reviews || '',
         });
         setLoading(false);
@@ -164,9 +164,9 @@ const EditProfile = () => {
           onChange={handleChange}
         >
           <option value="">Select a Category</option>
-          {supplierCategory.map((supplierCategory) => (
-            <option key={supplierCategory.id} value={supplierCategory.name}>
-              {supplierCategory.name}
+          {supplier_category.map((supplier_category) => (
+            <option key={supplier_category.id} value={supplier_category.name}>
+              {supplier_category.name}
             </option>
           ))}
         </select>

@@ -14,7 +14,7 @@ const PublicProfile = () => {
     email: '',
     phone_number: '',
     bio: '',
-    supplierCategory: '',
+    supplier_category: '',
     reviews: '',
   });
   const [loading, setLoading] = useState(true);
@@ -80,7 +80,7 @@ const PublicProfile = () => {
         <p><strong>Email:</strong> {userData.email}</p>
         <p><strong>Phone:</strong> {userData.phone_number}</p>
         <p><strong>Bio:</strong> {userData.bio}</p>
-        <p><strong>Category:</strong> {userData.supplierCategory}</p> {/* Display category */}
+        <p><strong>Category:</strong> {userData.supplier_category}</p> {/* Display category */}
         <p><strong>Reviews:</strong> {userData.reviews}</p> {/* Display reviews */}
         <button onClick={() => setShowContactForm(true)} className="contact-button">
           Contact

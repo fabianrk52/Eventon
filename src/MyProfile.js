@@ -6,7 +6,6 @@ import './MyProfile.css';
 
 const MyProfile = () => {
   const userID = Cookies.get('userId');
-  console.log(userID);
   const navigate = useNavigate();
 
   const [userData, setUserData] = useState({
@@ -17,9 +16,10 @@ const MyProfile = () => {
     email: '',
     phone_number: '',
     bio: '',
-    category: '',
+    supplier_category: '',
     reviews: '',
   });
+  console.log(userData);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -63,7 +63,7 @@ const MyProfile = () => {
         <p><strong>Email:</strong> {userData.email}</p>
         <p><strong>Phone:</strong> {userData.phone_number}</p>
         <p><strong>Bio:</strong> {userData.bio}</p>
-        <p><strong>Category:</strong> {userData.category}</p>
+        <p><strong>Category:</strong> {userData.supplier_category}</p>
         <p><strong>Reviews:</strong> {userData.reviews}</p>
         <button className="edit-button" onClick={handleEdit}>Edit Profile</button> {/* Edit button */}
       </div>
