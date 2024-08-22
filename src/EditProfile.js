@@ -36,7 +36,7 @@ const EditProfile = () => {
             Authorization: `Bearer ${Cookies.get('userToken')}`  // Use token from cookies
           }
         });
-        const userData = response.data;
+        const userData = response.data[0];
         setFormData({
           coverPhoto: userData.coverPhoto || 'default-cover.jpg',
           profilePhoto: userData.profilePhoto || 'default-profile.jpg',

@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import './PublicProfile.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import Cookies from 'js-cookie';
+
 
 const PublicProfile = () => {
   const { id } = useParams();
@@ -31,9 +33,13 @@ const PublicProfile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`http://localhost:65000/user-profile/${id}`); // Replace with your actual API endpoint
-        setUserData(response.data);
-        console.log(response.data);
+        const response = await axios.get(`http://localhost:65000/user-profile/${id}`,{
+          headers: {
+            Authorization: `Bearer ${Cookies.get('userToken')}`,  // Use token from cookies
+          }
+        });
+        setUserData(response.data[0]);
+        console.log(response.data[0]);
         setLoading(false);
       } catch (err) {
         setError('Failed to load user data');

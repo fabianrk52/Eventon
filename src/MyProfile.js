@@ -31,7 +31,7 @@ const MyProfile = () => {
             Authorization: `Bearer ${Cookies.get('userToken')}`  // Use token from cookies
           }
         });
-        setUserData(response.data);
+        setUserData(response.data[0]);
         setLoading(false);
       } catch (err) {
         setError('Failed to load user data.');
