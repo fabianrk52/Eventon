@@ -8,26 +8,20 @@ const EventPage = () => {
   const { id } = useParams();
   const [events, setEvents] = useState([
     {
-      id: 1,
-      title: 'Event 1',
-      date: '2024-08-15',
-      location: 'New York, NY',
-      description: 'This is the description for Event 1.',
-      budget: 5000,
-      status: 'Planned',
-      numGuests: 100,
-      teammate: 'Alice Johnson',
-      guests: [
-        { name: 'John', surname: 'Doe', phone: '123-456-7890', confirmation: 'Confirmed', table: '8' },
-        { name: 'Jane', surname: 'Smith', phone: '098-765-4321', confirmation: 'Pending', table: '2' }
-      ],
-      tasks: [
-        { title: 'Setup Venue', description: 'Setup the venue', deadline: '2024-08-14', priority: 'High', teammate: 'John Doe', status: 'In Progress' },
-        { title: 'Send Invitations', description: 'Send invitations to all guests', deadline: '2024-08-09', priority: 'Medium', teammate: 'Jane Smith', status: 'Completed' }
-      ],
+      event_id: '',
+      title: '',
+      date: '',
+      location: '',
+      description: '',
+      budget: '',
+      status: '',
+      num_guests: '',
+      teammate: '',
+      guests: [],
+      tasks: [],
     },
-    // Other initial events...
   ]);
+
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [activeSections, setActiveSections] = useState({
     details: false,
@@ -48,8 +42,29 @@ const EventPage = () => {
   const [newStatus, setNewStatus] = useState('');  // New state for status
   const [newNumGuests, setNewNumGuests] = useState('');  // New state for number of guests
   const [newTeammate, setNewTeammate] = useState('');  // New state for teammate
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUserEvents = async () => {
+      try {
+        const response = await axios.get('http://localhost:65000/events-with-details', {
+          headers: {
+            Authorization: `Bearer ${Cookies.get('userToken')}`  // Use token from cookies
+          }
+        });
+        setEvents(response.data);
+        console.log(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError('Failed to load events');
+        setLoading(false);
+      }
+    };
+    fetchUserEvents();
+  }, []);
 
   const handleEventSelection = (event) => {
     setSelectedEvent(event);
@@ -78,7 +93,7 @@ const EventPage = () => {
       setNewDescription(selectedEvent.description);
       setNewBudget(selectedEvent.budget);
       setNewStatus(selectedEvent.status);
-      setNewNumGuests(selectedEvent.numGuests);
+      setNewNumGuests(selectedEvent.num_guests);
       setNewTeammate(selectedEvent.teammate);
     } else if (section === 'guests' && index !== null) {
       setNewGuest(selectedEvent.guests[index]);
@@ -113,7 +128,7 @@ const EventPage = () => {
         description: newDescription,
         budget: newBudget,
         status: newStatus,
-        numGuests: newNumGuests,
+        num_guests: newNumGuests,
         teammate: newTeammate
       };
 
@@ -368,7 +383,7 @@ const EventPage = () => {
                         <div>
                           <p>Description: {selectedEvent.description}</p>
                           <p>Budget: ${selectedEvent.budget}</p>
-                          <p>Number of Guests: {selectedEvent.numGuests}</p>
+                          <p>Number of Guests: {selectedEvent.num_guests}</p>
                           <p>Teammate: {selectedEvent.teammate}</p>
                           <p>Status: {selectedEvent.status}</p>
                           <button onClick={() => handleEditSection('details')} className="edit">Edit</button>
