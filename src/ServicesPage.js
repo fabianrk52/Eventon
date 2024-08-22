@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './ServicesPage.css';
 import { useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 const ServicesPage = () => {
   const navigate = useNavigate();
@@ -12,62 +13,80 @@ const ServicesPage = () => {
   const [category, setCategory] = useState(initialCategory);
   const [locationFilter, setLocationFilter] = useState('');
   const [rating, setRating] = useState('');
-  const [searchTerm, setSearchTerm] = useState(''); // New state for the free text search
+  const [searchTerm, setSearchTerm] = useState('');
+  const [suppliers, setSuppliers] = useState([]);  // State to store fetched suppliers
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // Example data, you can replace this with dynamic data fetching
-  const allServices = [
-    {
-      id: 1,
-      title: 'TLV Food Catering',
-      rating: 4.9,
-      reviews: 159,
-      location: 'Tel Aviv',
-      category: 'Catering',
-      image: '/catering.jpg',
-    },
-    {
-      id: 2,
-      title: 'Moshe Photography',
-      rating: 4.8,
-      reviews: 35,
-      location: 'Jerusalem',
-      category: 'Photography',
-      image: '/cover-profile.jpg',
-    },
-    {
-      id: 3,
-      title: 'Aviv DJ',
-      rating: 4.7,
-      reviews: 48,
-      location: 'Haifa',
-      category: 'Music',
-      image: '/dj.jpg',
-    },
-    {
-      id: 4,
-      title: 'Hatuna Event Hall',
-      rating: 4.7,
-      reviews: 48,
-      location: 'Jerusalem',
-      category: 'Hall',
-      image: '/weeding.jpg',
-    },
-    {
-      id: 5,
-      title: 'Franky Event Designer',
-      rating: 4.7,
-      reviews: 48,
-      location: 'Tel Aviv',
-      category: 'Decoration',
-      image: '/design.jpg',
-    },
-  ];
+  // const allServices = [
+  //   {
+  //     id: 1,
+  //     title: 'TLV Food Catering',
+  //     rating: 4.9,
+  //     reviews: 159,
+  //     location: 'Tel Aviv',
+  //     category: 'Catering',
+  //     image: '/catering.jpg',
+  //   },
+  //   {
+  //     id: 2,
+  //     title: 'Moshe Photography',
+  //     rating: 4.8,
+  //     reviews: 35,
+  //     location: 'Jerusalem',
+  //     category: 'Photography',
+  //     image: '/cover-profile.jpg',
+  //   },
+  //   {
+  //     id: 3,
+  //     title: 'Aviv DJ',
+  //     rating: 4.7,
+  //     reviews: 48,
+  //     location: 'Haifa',
+  //     category: 'Music',
+  //     image: '/dj.jpg',
+  //   },
+  //   {
+  //     id: 4,
+  //     title: 'Hatuna Event Hall',
+  //     rating: 4.7,
+  //     reviews: 48,
+  //     location: 'Jerusalem',
+  //     category: 'Hall',
+  //     image: '/weeding.jpg',
+  //   },
+  //   {
+  //     id: 5,
+  //     title: 'Franky Event Designer',
+  //     rating: 4.7,
+  //     reviews: 48,
+  //     location: 'Tel Aviv',
+  //     category: 'Decoration',
+  //     image: '/design.jpg',
+  //   },
+  // ];
+
+  useEffect(() => {
+    const fetchSuppliers = async () => {
+      try {
+        const response = await axios.get('http://localhost:65000/suppliers');
+        setSuppliers(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError('Failed to load suppliers');
+        setLoading(false);
+      }
+    };
+
+    fetchSuppliers();
+  }, []);
 
   const handleMoreInfoClick = (id) => {
     navigate(`/profile/${id}`);
   };
 
-  const filteredServices = allServices.filter((service) => {
+  const filteredServices = suppliers.filter((service) => {
     return (
       (category === '' || service.category === category) &&
       (locationFilter === '' || service.location === locationFilter) &&
@@ -84,10 +103,10 @@ const ServicesPage = () => {
             <div className="service-card" key={service.id}>
               <img src={service.image} alt={service.title} className="service-image" />
               <div className="service-info">
-                <h3>{service.title}</h3>
-                <p><strong>Category:</strong> {service.category}</p>
+                <h3>{service.first_name + " " + service.last_name}</h3>
+                <p><strong>Category:</strong> {service.supplier_category}</p>
                 <p><strong>Location:</strong> {service.location}</p>
-                <p>({service.reviews} Reviews) {service.rating} <span className="stars">★★★★★</span></p>
+                <p>({service.reviews} Reviews) {service.review_grade}</p>
                 <button
                   className="info-button"
                   onClick={() => handleMoreInfoClick(service.id)}
