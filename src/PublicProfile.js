@@ -9,40 +9,38 @@ const PublicProfile = () => {
   const [userData, setUserData] = useState({
     coverPhoto: '',
     profilePhoto: '',
-    name: '',
+    first_name: '',
+    last_name: '',
     email: '',
-    phoneNumber: '',
+    phone_number: '',
     bio: '',
-    category: '', // New field for category
-    reviews: '',  // New field for reviews
+    supplierCategory: '',
+    reviews: '',
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showContactForm, setShowContactForm] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
+    first_name: '',
+    last_name: '',
     email: '',
-    phone: '',
+    phone_number: '',
     message: '',
   });
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`/api/user-profile/${id}`); // Replace with your actual API endpoint
+        const response = await axios.get(`http://localhost:65000/user-profile/${id}`); // Replace with your actual API endpoint
         setUserData(response.data);
+        console.log(response.data);
         setLoading(false);
       } catch (err) {
         setError('Failed to load user data');
         setLoading(false);
       }
     };
-
-    if (id) {
-      fetchUserData();
-    }
+    fetchUserData();
   }, [id]);
 
   const handleInputChange = (e) => {
@@ -78,11 +76,11 @@ const PublicProfile = () => {
         <img src={userData.profilePhoto} alt="Profile" className="profile-photo" />
       </div>
       <div className="personal-info-container">
-        <h2>{userData.name}</h2>
+        <h2>{userData.first_name} {userData.last_name}</h2>
         <p><strong>Email:</strong> {userData.email}</p>
-        <p><strong>Phone:</strong> {userData.phoneNumber}</p>
+        <p><strong>Phone:</strong> {userData.phone_number}</p>
         <p><strong>Bio:</strong> {userData.bio}</p>
-        <p><strong>Category:</strong> {userData.category}</p> {/* Display category */}
+        <p><strong>Category:</strong> {userData.supplierCategory}</p> {/* Display category */}
         <p><strong>Reviews:</strong> {userData.reviews}</p> {/* Display reviews */}
         <button onClick={() => setShowContactForm(true)} className="contact-button">
           Contact

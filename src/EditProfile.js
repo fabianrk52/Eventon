@@ -1,27 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './EditProfile.css';
-import { useParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 const EditProfile = () => {
-  const userID = Cookies.get('userID');
-  const { id } = useParams();
+  const userID = Cookies.get('userId');
 
   const [formData, setFormData] = useState({
     coverPhoto: '/cover-profile.jpg',
     profilePhoto: '/dslr-camera.png',
-    name: '',
+    first_name: '',
+    last_name: '',
     email: '',
-    phoneNumber: '',
+    phone_number: '',
     bio: '',
-    category: '',
+    supplierCategory: '',
     reviews: '', // Read-only reviews field
   });
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [categories, setCategories] = useState([
+  const [supplierCategory, setCategories] = useState([
     { 'value': "Catering", 'name': "Catering" },
     { 'value': "Decoration", 'name': "Decoration" },
     { 'value': "Music", 'name': "Music" },
@@ -32,16 +31,17 @@ const EditProfile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`/api/user-profile/${userID}`); // Replace with your actual API endpoint
+        const response = await axios.get(`http://localhost:65000/user-profile/${userID}`); // Replace with your actual API endpoint
         const userData = response.data;
         setFormData({
           coverPhoto: userData.coverPhoto || 'default-cover.jpg',
           profilePhoto: userData.profilePhoto || 'default-profile.jpg',
-          name: userData.name || '',
+          first_name: userData.name || '',
+          last_name: userData.name || '',
           email: userData.email || '',
-          phoneNumber: userData.phoneNumber || '',
+          phone_number: userData.phoneNumber || '',
           bio: userData.bio || '',
-          category: userData.category || '',
+          supplierCategory: userData.supplierCategory || '',
           reviews: userData.reviews || '',
         });
         setLoading(false);
@@ -52,7 +52,7 @@ const EditProfile = () => {
     };
 
     fetchUserData();
-  }, [id]);
+  }, [userID]);
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
@@ -125,11 +125,17 @@ const EditProfile = () => {
         <label>Name</label>
         <input
           type="text"
-          name="name"
-          value={formData.name}
+          name="first_name"
+          value={formData.first_name}
           onChange={handleChange}
         />
-
+        <label>Surname</label>
+        <input
+          type="text"
+          name="last_name"
+          value={formData.last_name}
+          onChange={handleChange}
+        />
         <label>Email</label>
         <input
           type="email"
@@ -137,7 +143,6 @@ const EditProfile = () => {
           value={formData.email}
           onChange={handleChange}
         />
-
         <label>Phone Number</label>
         <input
           type="text"
@@ -152,7 +157,6 @@ const EditProfile = () => {
           value={formData.bio}
           onChange={handleChange}
         />
-
         <label>Category</label> {/* Dropdown for selecting categories */}
         <select
           name="category"
@@ -160,9 +164,9 @@ const EditProfile = () => {
           onChange={handleChange}
         >
           <option value="">Select a Category</option>
-          {categories.map((category) => (
-            <option key={category.id} value={category.name}>
-              {category.name}
+          {supplierCategory.map((supplierCategory) => (
+            <option key={supplierCategory.id} value={supplierCategory.name}>
+              {supplierCategory.name}
             </option>
           ))}
         </select>

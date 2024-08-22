@@ -5,15 +5,17 @@ import { useNavigate } from 'react-router-dom';
 import './MyProfile.css';
 
 const MyProfile = () => {
-  const userID = Cookies.get('userID');
+  const userID = Cookies.get('userId');
+  console.log(userID);
   const navigate = useNavigate();
 
   const [userData, setUserData] = useState({
     coverPhoto: '',
     profilePhoto: '',
-    name: '',
+    first_name: '',
+    last_name:'',
     email: '',
-    phoneNumber: '',
+    phone_number: '',
     bio: '',
     category: '',
     reviews: '',
@@ -24,7 +26,7 @@ const MyProfile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`/api/user-profile/${userID}`); // Replace with your actual API endpoint
+        const response = await axios.get(`http://localhost:65000/user-profile/${userID}`); // Replace with your actual API endpoint
         setUserData(response.data);
         setLoading(false);
       } catch (err) {
@@ -34,10 +36,10 @@ const MyProfile = () => {
     };
 
     fetchUserData();
-  }, []);
+  }, [userID]);
 
   const handleEdit = () => {
-    navigate(`/edit-profile/${userID}`); // Navigate to the EditProfile page
+    navigate(`/edit-profile`); // Navigate to the EditProfile page
   };
 
 //   if (loading) {
@@ -57,9 +59,9 @@ const MyProfile = () => {
         <img src={userData.profilePhoto} alt="Profile" className="profile-photo" />
       </div>
       <div className="personal-info-container">
-        <h2>{userData.name}</h2>
+        <h2>{userData.first_name} {userData.last_name}</h2>
         <p><strong>Email:</strong> {userData.email}</p>
-        <p><strong>Phone:</strong> {userData.phoneNumber}</p>
+        <p><strong>Phone:</strong> {userData.phone_number}</p>
         <p><strong>Bio:</strong> {userData.bio}</p>
         <p><strong>Category:</strong> {userData.category}</p>
         <p><strong>Reviews:</strong> {userData.reviews}</p>
