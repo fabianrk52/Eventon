@@ -33,7 +33,7 @@ const PublicProfile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`http://localhost:65000/user-profile/${id}`,{
+        const response = await axios.get(`http://localhost:65000/user-profile/${id}`, {
           headers: {
             Authorization: `Bearer ${Cookies.get('userToken')}`,  // Use token from cookies
           }
@@ -57,21 +57,17 @@ const PublicProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`/api/send-request/${id}`, formData); // Replace with your actual API endpoint
+      await axios.post(`http://localhost:65000/send-message/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('userToken')}`
+        }
+      });
       setShowContactForm(false);
-      alert('Your request has been sent!');
+      alert('Your message has been sent!');
     } catch (err) {
-      alert('Failed to send your request');
+      alert('Failed to send your message');
     }
   };
-
-  // if (loading) {
-  //   return <p>Loading...</p>;
-  // }
-
-  // if (error) {
-  //   return <p>{error}</p>;
-  // }
 
   return (
     <div className="public-profile-container">
@@ -101,8 +97,16 @@ const PublicProfile = () => {
               <label>Name</label>
               <input
                 type="text"
-                name="name"
-                value={formData.name}
+                name="first_name"
+                value={formData.first_name}
+                onChange={handleInputChange}
+                required
+              />
+              <label>Surname</label>
+              <input
+                type="text"
+                name="last_name"
+                value={formData.last_name}
                 onChange={handleInputChange}
                 required
               />
@@ -117,8 +121,8 @@ const PublicProfile = () => {
               <label>Phone</label>
               <input
                 type="phone"
-                name="phone"
-                value={formData.phone}
+                name="phone_number"
+                value={formData.phone_number}
                 onChange={handleInputChange}
                 required
               />
@@ -131,7 +135,7 @@ const PublicProfile = () => {
               />
               <div className="contact-form-buttons">
                 <button type="button" className="cancel-button-contact" onClick={() => setShowContactForm(false)}>Cancel</button>
-                <button type="submit" className="submit-button">Send</button>
+                <button type="submit" className="submit-button" onClick={handleSubmit}>Send</button>
               </div>
             </form>
           </div>

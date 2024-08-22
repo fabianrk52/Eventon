@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import * as XLSX from 'xlsx'; // Import the xlsx library
 import './SupplierMessagesPage.css';
+import Cookies from 'js-cookie';
 
 const SupplierMessagesPage = () => {
   const [messages, setMessages] = useState([]);
@@ -16,32 +17,23 @@ const SupplierMessagesPage = () => {
   const [filterDateFrom, setFilterDateFrom] = useState('');
   const [filterDateTo, setFilterDateTo] = useState('');
 
-  // Sample data
-  const inquiries = [
-    {
-      id: 1,
-      name: "John Doe",
-      email: "john.doe@example.com",
-      phone: "+1 555-123-4567",
-      message: "I'm interested in your catering services for a wedding in December. Could you please provide more details on pricing and availability?",
-      date: "2024-08-01T10:00:00Z",
-      status: "Pending"
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      email: "jane.smith@example.com",
-      phone: "+1 555-987-6543",
-      message: "I'm looking for decoration services for a corporate event. Do you offer package deals for large events?",
-      date: "2024-08-02T12:30:00Z",
-      status: "In Progress"
-    },
-    // More inquiries...
-  ];
-
   useEffect(() => {
-    setMessages(inquiries); // Set initial messages
-    setLoading(false);
+    const fetchMessages = async () => {
+      try {
+        const response = await axios.get(`http://localhost:65000/supplier-messages`, {
+          headers: {
+            Authorization: `Bearer ${Cookies.get('userToken')}`
+          }
+        });
+        setMessages(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError('Failed to load messages');
+        setLoading(false);
+      }
+    };
+
+    fetchMessages();
   }, []);
 
   const handleEditStatus = (id, currentStatus) => {
@@ -51,8 +43,12 @@ const SupplierMessagesPage = () => {
 
   const handleSaveStatus = async (id) => {
     try {
-      // Update the status in the backend (if applicable)
-      await axios.put(`/api/supplier-messages/${id}`, { status: newStatus });
+      // Update the status in the backend
+      await axios.put(`http://localhost:65000/supplier-messages/${id}`, { status: newStatus }, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('userToken')}`
+        }
+      });
 
       // Update the status in the frontend
       setMessages((prevMessages) =>
@@ -88,9 +84,10 @@ const SupplierMessagesPage = () => {
   const handleExport = () => {
     const exportData = filteredMessages.map((message, index) => ({
       "Inquiry Number": index + 1,
-      "Customer Name": message.name,
+      "First Name": message.first_name,
+      "Surname": message.last_name,
       "Email": message.email,
-      "Phone": message.phone,
+      "Phone": message.number_phone,
       "Message": message.message,
       "Date Sent": new Date(message.date).toLocaleDateString(),
       "Status": message.status,
@@ -181,9 +178,9 @@ const SupplierMessagesPage = () => {
             {filteredMessages.map((message, index) => (
               <tr key={message.id}>
                 <td>{index + 1}</td>
-                <td>{message.name}</td>
+                <td>{message.first_name + message.last_name}</td>
                 <td>{message.email}</td>
-                <td className='phone-cell'>{message.phone}</td>
+                <td className='phone-cell'>{message.phone_number}</td>
                 <td>{message.message}</td>
                 <td>{new Date(message.date).toLocaleDateString()}</td>
                 <td>
