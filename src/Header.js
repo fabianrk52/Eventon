@@ -7,6 +7,7 @@ const Header = () => {
   const navigate = useNavigate();
   const token = Cookies.get('userToken');
   const userName = Cookies.get('userName');
+  const userRole = Cookies.get('userRole');
 
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -37,7 +38,7 @@ const Header = () => {
         <img src='/logo.png' alt="App Logo" className="header-logo" />
         <nav className="header-nav">
           <Link to="/">Home</Link>
-          <Link to="/events">Events</Link>
+          {userRole === "EventPlanner" ? <Link to="/events">Events</Link> : <Link to="/supplier-messages" className="header-messages-link">Inquiries</Link>}
           <div className="dropdown">
             <button className="dropdown-button" onClick={toggleDropdown}>
               Services
@@ -54,7 +55,6 @@ const Header = () => {
             )}
           </div>
           <Link to="/my-profile">My Profile</Link>
-          <Link to="/supplier-messages" className="header-messages-link">Inquiries</Link> {/* New Link */}
         </nav>
       </div>
       <div className="header-user-container">
