@@ -18,54 +18,6 @@ const ServicesPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Example data, you can replace this with dynamic data fetching
-  // const allServices = [
-  //   {
-  //     id: 1,
-  //     title: 'TLV Food Catering',
-  //     rating: 4.9,
-  //     reviews: 159,
-  //     location: 'Tel Aviv',
-  //     category: 'Catering',
-  //     image: '/catering.jpg',
-  //   },
-  //   {
-  //     id: 2,
-  //     title: 'Moshe Photography',
-  //     rating: 4.8,
-  //     reviews: 35,
-  //     location: 'Jerusalem',
-  //     category: 'Photography',
-  //     image: '/cover-profile.jpg',
-  //   },
-  //   {
-  //     id: 3,
-  //     title: 'Aviv DJ',
-  //     rating: 4.7,
-  //     reviews: 48,
-  //     location: 'Haifa',
-  //     category: 'Music',
-  //     image: '/dj.jpg',
-  //   },
-  //   {
-  //     id: 4,
-  //     title: 'Hatuna Event Hall',
-  //     rating: 4.7,
-  //     reviews: 48,
-  //     location: 'Jerusalem',
-  //     category: 'Hall',
-  //     image: '/weeding.jpg',
-  //   },
-  //   {
-  //     id: 5,
-  //     title: 'Franky Event Designer',
-  //     rating: 4.7,
-  //     reviews: 48,
-  //     location: 'Tel Aviv',
-  //     category: 'Decoration',
-  //     image: '/design.jpg',
-  //   },
-  // ];
 
   useEffect(() => {
     const fetchSuppliers = async () => {
