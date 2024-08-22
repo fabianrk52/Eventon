@@ -24,15 +24,15 @@ const App = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/signup-2fa" element={<SignUpTwoFactorAuth />} />
         <Route path="/login-2fa" element={<LoginTwoFactorAuth />} />
-        <Route path="/profile/:id" element={<PublicProfile />} />
-        <Route path="/my-profile" element={<MyProfile />} />
+        <Route path="/profile/:id" element={tokeb ? <PublicProfile /> : <Navigate to="/" />} />
+        <Route path="/my-profile" element={token ? <MyProfile /> : <Navigate to="/" />} />
         <Route path="/" element={<EventonLandingPage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/events" element={<EventPage />} />
-        <Route path="/services" element={<ServicesPage />} />
-        <Route path="/edit-profile/:id" element={<EditProfile />} />
-        <Route path="*" element={<Navigate to ='/' />}/>
-        <Route path="/supplier-messages" element={<SupplierMessagesPage />} />
+        <Route path="/events" element={token ? <EventPage /> : <Navigate to="/" />} />
+        <Route path="/services" element={token ? <ServicesPage /> : <Navigate to="/" />} />
+        <Route path="/edit-profile/:id" element={token ? <EditProfile /> : <Navigate to="/" />} />
+        <Route path="*" element={<Navigate to='/' />} />
+        <Route path="/supplier-messages" element={token ? <SupplierMessagesPage /> : <Navigate to="/" />} />
       </Routes>
     </Router>
   );

@@ -6,14 +6,14 @@ import Cookies from 'js-cookie';
 const Header = () => {
   const navigate = useNavigate();
   const token = Cookies.get('userToken');
-  const userName = Cookies.get('userName'); // Assuming the user's name is stored in a cookie
+  const userName = Cookies.get('userName');
 
   const [showDropdown, setShowDropdown] = useState(false);
 
   const handleSignOut = () => {
     Cookies.remove('userToken');
     Cookies.remove('userName');
-    navigate('/login');
+    navigate('/');
   };
 
   const toggleDropdown = () => {

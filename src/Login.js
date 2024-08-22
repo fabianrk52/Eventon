@@ -19,8 +19,7 @@ const Login = () => {
         const token = response.data.token;
         Cookies.set('userToken', token, { expires: 7 });
         Cookies.set('userId', response.data.userId, { expires: 7 });
-        console.log(token);
-        console.log(response.data.userId);
+        Cookies.set('userName', response.data.name, { expires: 7 });
         navigate('/login-2fa');
       } else {
         setMessage('Invalid login credentials.');
