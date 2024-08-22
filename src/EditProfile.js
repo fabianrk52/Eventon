@@ -7,9 +7,8 @@ const EditProfile = () => {
   const userID = Cookies.get('userId');
 
   const [formData, setFormData] = useState({
-    coverPhoto: '/cover-profile.jpg',
-    profilePhoto: '/dslr-camera.png',
-    first_name: '',
+    coverPhoto: '',
+    profilePhoto: '',
     last_name: '',
     email: '',
     phone_number: '',
@@ -38,12 +37,12 @@ const EditProfile = () => {
         });
         const userData = response.data[0];
         setFormData({
-          coverPhoto: userData.coverPhoto || 'default-cover.jpg',
-          profilePhoto: userData.profilePhoto || 'default-profile.jpg',
-          first_name: userData.name || '',
-          last_name: userData.name || '',
+          coverPhoto: userData.coverPhoto || '',
+          profilePhoto: userData.profilePhoto || '',
+          first_name: userData.first_name || '',
+          last_name: userData.last_name || '',
           email: userData.email || '',
-          phone_number: userData.phoneNumber || '',
+          phone_number: userData.phone_number || '',
           bio: userData.bio || '',
           supplier_category: userData.supplier_category || '',
           reviews: userData.reviews || '',
@@ -78,7 +77,11 @@ const EditProfile = () => {
 
   const handleSave = async () => {
     try {
-      await axios.put(`/api/user-profile/${userID}`, formData); // Update API endpoint
+      await axios.put(`http://localhost:65000/user-profile/${userID}`, formData, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('userToken')}`
+        }
+      });
       alert('Profile updated successfully!');
     } catch (err) {
       alert('Failed to update profile.');
@@ -150,8 +153,8 @@ const EditProfile = () => {
         <label>Phone Number</label>
         <input
           type="text"
-          name="phoneNumber"
-          value={formData.phoneNumber}
+          name="phone_number"
+          value={formData.phone_number}
           onChange={handleChange}
         />
 
