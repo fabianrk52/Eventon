@@ -35,7 +35,7 @@ const EventPage = () => {
   const [editingSection, setEditingSection] = useState(null);
   const [editingIndex, setEditingIndex] = useState(null);
   const [newGuest, setNewGuest] = useState({ name: '', surname: '', phone: '', confirmation: 'Pending', table: '' });
-  const [newTask, setNewTask] = useState({ title: '', description: '', deadline: '', priority: '', teammate: '', status: '' });
+  const [newTask, setNewTask] = useState({ title: '', description: '', deadline: '', priority: 'Low', teammate: '', status: 'Not Started' });
   const [newDescription, setNewDescription] = useState('');
   const [newTitle, setNewTitle] = useState('');  // New state for title
   const [newDate, setNewDate] = useState('');  // New state for date
@@ -118,7 +118,7 @@ const EventPage = () => {
     setEditingSection(null);
     setEditingIndex(null);
     setNewGuest({ name: '', surname: '', phone: '', confirmation: 'Pending', table: '' });
-    setNewTask({ title: '', description: '', deadline: '', priority: '', teammate: '', status: '' });
+    setNewTask({ title: '', description: '', deadline: '', priority: 'Low', teammate: '', status: 'Not Started' });
     setNewTitle('');
     setNewDate('');
     setNewLocation('');
@@ -238,21 +238,32 @@ const EventPage = () => {
   const handleSaveTask = async () => {
     try {
       let updatedTasks;
-      if (editingIndex !== null) {  // Editing an existing task
+      let response;
+
+      if (editingIndex !== null) {
+        // Editing an existing task
         updatedTasks = [...selectedEvent.tasks];
         updatedTasks[editingIndex] = newTask;  // Update the existing task
-      } else {  // Adding a new task
-        updatedTasks = [...selectedEvent.tasks, newTask];
+        console.log(newTask);
+        response = await axios.put(`http://localhost:65000/events/${selectedEvent.id}/tasks/${selectedEvent.tasks[editingIndex].id}`, newTask, {
+          headers: {
+            Authorization: `Bearer ${Cookies.get('userToken')}`,  // Use token from cookies
+          },
+        });
+      } else {
+        // Adding a new task
+        response = await axios.post(`http://localhost:65000/events/${selectedEvent.id}/tasks`, newTask, {
+          headers: {
+            Authorization: `Bearer ${Cookies.get('userToken')}`,  // Use token from cookies
+          },
+        });
+        console.log(newTask);
+
+        updatedTasks = [...selectedEvent.tasks, response.data];
       }
-      const updatedEvent = { ...selectedEvent, tasks: updatedTasks };
 
-      const response = await axios.put(`https://your-api-endpoint.com/events/${selectedEvent.id}`, updatedEvent, {
-        headers: {
-          Authorization: `Bearer ${Cookies.get('userToken')}`, // Use token from cookies
-        },
-      });
-
-      if (response.status === 200) {
+      if (response.status === 200 || response.status === 201) {
+        const updatedEvent = { ...selectedEvent, tasks: updatedTasks };
         setEvents(events.map(event => event.id === selectedEvent.id ? updatedEvent : event));
         setSelectedEvent(updatedEvent);
         handleCancelEditing();
@@ -262,18 +273,19 @@ const EventPage = () => {
     }
   };
 
+
   const handleDeleteTask = async (index) => {
     try {
-      const updatedTasks = selectedEvent.tasks.filter((_, i) => i !== index);
-      const updatedEvent = { ...selectedEvent, tasks: updatedTasks };
-
-      const response = await axios.put(`https://your-api-endpoint.com/events/${selectedEvent.id}`, updatedEvent, {
+      const taskId = selectedEvent.tasks[index].id;  // Get the task ID
+      const response = await axios.delete(`http://localhost:65000/events/${selectedEvent.id}/tasks/${taskId}`, {
         headers: {
-          Authorization: `Bearer ${Cookies.get('userToken')}`, // Use token from cookies
+          Authorization: `Bearer ${Cookies.get('userToken')}`,  // Use token from cookies
         },
       });
 
       if (response.status === 200) {
+        const updatedTasks = selectedEvent.tasks.filter((_, i) => i !== index);
+        const updatedEvent = { ...selectedEvent, tasks: updatedTasks };
         setEvents(events.map(event => event.id === selectedEvent.id ? updatedEvent : event));
         setSelectedEvent(updatedEvent);
       }
@@ -290,7 +302,7 @@ const EventPage = () => {
     if (section === 'guests') {
       setNewGuest({ name: '', surname: '', phone: '', confirmation: 'Pending', table: '' });
     } else if (section === 'tasks') {
-      setNewTask({ title: '', description: '', openedBy: '', deadline: '', priority: '', teammate: '', status: '' });
+      setNewTask({ title: '', description: '', openedBy: '', deadline: '', priority: 'Low', teammate: '', status: 'Not Started' });
     }
   };
 
@@ -537,6 +549,7 @@ const EventPage = () => {
                                     <td><input type="text" name="teammate" value={newTask.teammate} onChange={(e) => setNewTask({ ...newTask, teammate: e.target.value })} placeholder="Teammate" /></td>
                                     <td>
                                       <select name="status" value={newTask.status} onChange={(e) => setNewTask({ ...newTask, status: e.target.value })}>
+                                        <option value="Not Started">Not Started</option>
                                         <option value="In Progress">In Progress</option>
                                         <option value="Completed">Completed</option>
                                       </select>
@@ -577,6 +590,7 @@ const EventPage = () => {
                                 <td><input type="text" name="teammate" value={newTask.teammate} onChange={(e) => setNewTask({ ...newTask, teammate: e.target.value })} placeholder="Teammate" /></td>
                                 <td>
                                   <select name="status" value={newTask.status} onChange={(e) => setNewTask({ ...newTask, status: e.target.value })}>
+                                    <option value="Not Started">Not Started</option>
                                     <option value="In Progress">In Progress</option>
                                     <option value="Completed">Completed</option>
                                   </select>
