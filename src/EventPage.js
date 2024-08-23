@@ -591,7 +591,7 @@ const EventPage = () => {
                                   <>
                                     <td>{task.title}</td>
                                     <td>{task.description}</td>
-                                    <td>{task.deadline}</td>
+                                    <td>{new Date(task.deadline).toLocaleDateString()}</td>
                                     <td>{task.priority}</td>
                                     <td>{task.teammate}</td>
                                     <td>{task.status}</td>
