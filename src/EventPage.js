@@ -357,7 +357,7 @@ const EventPage = () => {
               <>
                 <h1>{selectedEvent.title}</h1>
                 <p className="event-subtitle">
-                  <strong>Date:</strong> {selectedEvent.date} | <strong>Location:</strong> {selectedEvent.location}
+                  <strong>Date:</strong> {new Date(selectedEvent.date).toLocaleDateString()} | <strong>Location:</strong> {selectedEvent.location}
                 </p>
                 <div className="accordion">
                   <div className="accordion-section">
