@@ -14,6 +14,7 @@ const EditProfile = () => {
     phone_number: '',
     bio: '',
     supplier_category: '',
+    location: '',
     reviews: '', // Read-only reviews field
   });
 
@@ -44,8 +45,10 @@ const EditProfile = () => {
           email: userData.email || '',
           phone_number: userData.phone_number || '',
           bio: userData.bio || '',
+          location: userData.location || '',
           supplier_category: userData.supplier_category || '',
           reviews: userData.reviews || '',
+          role: userData.role,
         });
         setLoading(false);
       } catch (err) {
@@ -61,7 +64,7 @@ const EditProfile = () => {
     const file = e.target.files[0];
     const formData = new FormData();
     formData.append('image', file);
-  
+
     try {
       const response = await axios.post(`http://localhost:65000/upload-image/${userID}/profile`, formData, {
         headers: {
@@ -69,10 +72,10 @@ const EditProfile = () => {
           'Content-Type': 'multipart/form-data'  // Important for file uploads
         }
       });
-  
+
       const base64Image = response.data.base64Image;
       alert('Profile image uploaded successfully');
-  
+
       // Update the state with the uploaded profile image
       setFormData((prevFormData) => ({
         ...prevFormData,
@@ -82,12 +85,12 @@ const EditProfile = () => {
       alert('Error uploading profile image');
     }
   };
-  
+
   const handleCoverImageUpload = async (e) => {
     const file = e.target.files[0];
     const formData = new FormData();
     formData.append('image', file);
-  
+
     try {
       const response = await axios.post(`http://localhost:65000/upload-image/${userID}/cover`, formData, {
         headers: {
@@ -95,10 +98,10 @@ const EditProfile = () => {
           'Content-Type': 'multipart/form-data'  // Important for file uploads
         }
       });
-  
+
       const base64Image = response.data.base64Image;
       alert('Cover image uploaded successfully');
-  
+
       // Update the state with the uploaded cover image
       setFormData((prevFormData) => ({
         ...prevFormData,
@@ -125,6 +128,7 @@ const EditProfile = () => {
         email: formData.email,
         phone_number: formData.phone_number,
         bio: formData.bio,
+        location:formData.location,
         supplier_category: formData.supplier_category,
       };
 
@@ -209,28 +213,36 @@ const EditProfile = () => {
           value={formData.phone_number}
           onChange={handleChange}
         />
-
         <label>Bio</label>
         <textarea
           name="bio"
           value={formData.bio}
           onChange={handleChange}
         />
-        <label>Category</label> {/* Dropdown for selecting categories */}
-        <select
-          name="category"
-          value={formData.category}
+        <label>Location </label>
+        <input
+          name="location"
+          value={formData.location}
           onChange={handleChange}
-        >
-          <option value="">Select a Category</option>
-          {supplier_category.map((supplier_category) => (
-            <option key={supplier_category.id} value={supplier_category.name}>
-              {supplier_category.name}
-            </option>
-          ))}
-        </select>
+        />
+        {
+          formData.role ? <>
+            <label>Category</label>
+            <select
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+            >
+              <option value="">Select a Category</option>
+              {supplier_category.map((supplier_category) => (
+                <option key={supplier_category.id} value={supplier_category.name}>
+                  {supplier_category.name}
+                </option>
+              ))}
 
-        <label>Reviews</label> {/* Display reviews as read-only */}
+            </select></> : <></>
+        }
+        <label>Reviews</label>
         <div className="read-only-reviews">
           {formData.reviews || 'No reviews available.'}
         </div>
