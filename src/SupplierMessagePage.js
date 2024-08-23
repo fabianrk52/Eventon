@@ -72,7 +72,8 @@ const SupplierMessagesPage = () => {
     const dateTo = filterDateTo ? new Date(filterDateTo) : null;
 
     return (
-      (filterName === '' || message.name.toLowerCase().includes(filterName.toLowerCase())) &&
+      (filterName === '' || message.first_name.toLowerCase().includes(filterName.toLowerCase()) 
+      || message.last_name.toLowerCase().includes(filterName.toLowerCase())) &&
       (filterStatus === '' || message.status === filterStatus) &&
       (!dateFrom || messageDate >= dateFrom) &&
       (!dateTo || messageDate <= dateTo)
@@ -178,7 +179,7 @@ const SupplierMessagesPage = () => {
             {filteredMessages.map((message, index) => (
               <tr key={message.id}>
                 <td>{index + 1}</td>
-                <td>{message.first_name + message.last_name}</td>
+                <td>{message.first_name + " " + message.last_name}</td>
                 <td>{message.email}</td>
                 <td className='phone-cell'>{message.phone_number}</td>
                 <td>{message.message}</td>
