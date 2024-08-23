@@ -39,23 +39,25 @@ const Header = () => {
         <img src='/logo.png' alt="App Logo" className="header-logo" />
         <nav className="header-nav">
           <Link to="/">Home</Link>
-          {userRole === "EventPlanner" ? <Link to="/events">Events</Link> : <Link to="/supplier-messages" className="header-messages-link">Inquiries</Link>}
-          <div className="dropdown">
-            <button className="dropdown-button" onClick={toggleDropdown}>
-              Services
-            </button>
-            {showDropdown && (
-              <div className="dropdown-menu">
-                <button onClick={() => handleCategorySelect('All')}>All</button>
-                <button onClick={() => handleCategorySelect('Catering')}>Catering</button>
-                <button onClick={() => handleCategorySelect('Decoration')}>Decoration</button>
-                <button onClick={() => handleCategorySelect('Music')}>Music</button>
-                <button onClick={() => handleCategorySelect('Photography')}>Photography</button>
-                <button onClick={() => handleCategorySelect('Hall')}>Hall</button>
-              </div>
-            )}
-          </div>
-          <Link to="/my-profile">My Profile</Link>
+          {!token ? <></> : userRole === "EventPlanner" ? <Link to="/events">Events</Link> : <Link to="/supplier-messages" className="header-messages-link">Inquiries</Link>}
+          {token ? <>
+            <div className="dropdown">
+              <button className="dropdown-button" onClick={toggleDropdown}>
+                Services
+              </button>
+              {showDropdown && (
+                <div className="dropdown-menu">
+                  <button onClick={() => handleCategorySelect('All')}>All</button>
+                  <button onClick={() => handleCategorySelect('Catering')}>Catering</button>
+                  <button onClick={() => handleCategorySelect('Decoration')}>Decoration</button>
+                  <button onClick={() => handleCategorySelect('Music')}>Music</button>
+                  <button onClick={() => handleCategorySelect('Photography')}>Photography</button>
+                  <button onClick={() => handleCategorySelect('Hall')}>Hall</button>
+                </div>
+              )}
+            </div>
+          </> : <></>}
+          {token ? <Link to="/my-profile">My Profile</Link> : <></>}
         </nav>
       </div>
       <div className="header-user-container">
