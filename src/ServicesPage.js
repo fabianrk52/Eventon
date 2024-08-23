@@ -47,7 +47,7 @@ const ServicesPage = () => {
       (category === '' || service.supplier_category === category) &&
       (locationFilter === '' || service.location === locationFilter) &&
       (rating === '' || service.rating >= parseFloat(rating)) &&
-      (searchTerm === '' || service.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||  service.last_name.toLowerCase().includes(searchTerm.toLowerCase())) // Filtering by search term
+      (searchTerm === '' || service.first_name.toLowerCase().includes(searchTerm.toLowerCase()) || service.last_name.toLowerCase().includes(searchTerm.toLowerCase())) // Filtering by search term
     );
   });
 
