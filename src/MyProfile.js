@@ -10,7 +10,7 @@ const MyProfile = () => {
 
   const [userData, setUserData] = useState({
     cover_image: '',
-    profile_image: '',  // Ensure this matches the field from the backend
+    profile_image: '',
     first_name: '',
     last_name: '',
     email: '',
@@ -28,7 +28,7 @@ const MyProfile = () => {
       try {
         const response = await axios.get(`http://localhost:65000/user-profile/${userID}`, {
           headers: {
-            Authorization: `Bearer ${Cookies.get('userToken')}`  // Use token from cookies
+            Authorization: `Bearer ${Cookies.get('userToken')}`
           }
         });
         setUserData(response.data[0]);
@@ -45,16 +45,8 @@ const MyProfile = () => {
   }, [userID]);
 
   const handleEdit = () => {
-    navigate(`/edit-profile`); // Navigate to the EditProfile page
+    navigate(`/edit-profile`);
   };
-
-  // if (loading) {
-  //   return <p>Loading...</p>;
-  // }
-
-  // if (error) {
-  //   return <p>{error}</p>;
-  // }
 
   return (
     <div className="my-profile-container">

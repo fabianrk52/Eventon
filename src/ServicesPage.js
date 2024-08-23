@@ -3,6 +3,8 @@ import './ServicesPage.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { Buffer } from 'buffer';
+
 
 const ServicesPage = () => {
   const navigate = useNavigate();
@@ -15,24 +17,20 @@ const ServicesPage = () => {
   const [locationFilter, setLocationFilter] = useState('');
   const [rating, setRating] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
-  const [suppliers, setSuppliers] = useState([]);  // State to store fetched suppliers
-  const [loading, setLoading] = useState(true);
+  const [suppliers, setSuppliers] = useState([]);
   const [error, setError] = useState(null);
-
 
   useEffect(() => {
     const fetchSuppliers = async () => {
       try {
         const response = await axios.get('http://localhost:65000/suppliers', {
           headers: {
-            Authorization: `Bearer ${Cookies.get('userToken')}`  // Use token from cookies
+            Authorization: `Bearer ${Cookies.get('userToken')}`
           }
         });
         setSuppliers(response.data);
-        setLoading(false);
       } catch (err) {
         setError('Failed to load suppliers');
-        setLoading(false);
       }
     };
 
@@ -58,7 +56,7 @@ const ServicesPage = () => {
         <div className="services-grid">
           {filteredServices.map((service) => (
             <div className="service-card" key={service.id}>
-              <img src={service.image} alt={service.title} className="service-image" />
+              <img src={`data:image/jpeg;base64,${Buffer.from(service.cover_image).toString('base64')}`} alt={service.title} className="service-image" />
               <div className="service-info">
                 <h3>{service.first_name + " " + service.last_name}</h3>
                 <p><strong>Category:</strong> {service.supplier_category}</p>

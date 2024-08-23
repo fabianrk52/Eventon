@@ -35,7 +35,7 @@ const PublicProfile = () => {
       try {
         const response = await axios.get(`http://localhost:65000/user-profile/${id}`, {
           headers: {
-            Authorization: `Bearer ${Cookies.get('userToken')}`,  // Use token from cookies
+            Authorization: `Bearer ${Cookies.get('userToken')}`,
           }
         });
         setUserData(response.data[0]);
@@ -72,6 +72,7 @@ const PublicProfile = () => {
   return (
     <div className="public-profile-container">
       <div className="cover-photo-container">
+        {console.log(userData.cover_image)}
         {userData.cover_image ? (
           <img src={`data:image/jpeg;base64,${userData.cover_image}`} alt="Cover" className="cover-photo" />
         ) : (
@@ -90,8 +91,8 @@ const PublicProfile = () => {
         <p><strong>Email:</strong> {userData.email}</p>
         <p><strong>Phone:</strong> {userData.phone_number}</p>
         <p><strong>Bio:</strong> {userData.bio}</p>
-        <p><strong>Category:</strong> {userData.supplier_category}</p> {/* Display category */}
-        <p><strong>Reviews:</strong> {userData.reviews}</p> {/* Display reviews */}
+        <p><strong>Category:</strong> {userData.supplier_category}</p>
+        <p><strong>Reviews:</strong> {userData.reviews}</p>
         <button onClick={() => setShowContactForm(true)} className="contact-button">
           Contact
         </button>
