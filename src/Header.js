@@ -14,6 +14,7 @@ const Header = () => {
   const handleSignOut = () => {
     Cookies.remove('userToken');
     Cookies.remove('userName');
+    alert("You Signed out");
     navigate('/');
   };
 
