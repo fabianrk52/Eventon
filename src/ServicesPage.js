@@ -11,6 +11,7 @@ const ServicesPage = () => {
   const location = useLocation();
 
   const queryParams = new URLSearchParams(location.search);
+
   const initialCategory = queryParams.get('category') || '';
 
   const [category, setCategory] = useState(initialCategory);
@@ -43,7 +44,7 @@ const ServicesPage = () => {
 
   const filteredServices = suppliers.filter((service) => {
     return (
-      (category === '' || service.category === category) &&
+      (category === '' || service.supplier_category === category) &&
       (locationFilter === '' || service.location === locationFilter) &&
       (rating === '' || service.rating >= parseFloat(rating)) &&
       (searchTerm === '' || service.title.toLowerCase().includes(searchTerm.toLowerCase())) // Filtering by search term
@@ -56,12 +57,13 @@ const ServicesPage = () => {
         <div className="services-grid">
           {filteredServices.map((service) => (
             <div className="service-card" key={service.id}>
+              {console.log(service)}
               <img src={`data:image/jpeg;base64,${Buffer.from(service.cover_image).toString('base64')}`} alt={service.title} className="service-image" />
               <div className="service-info">
                 <h3>{service.first_name + " " + service.last_name}</h3>
                 <p><strong>Category:</strong> {service.supplier_category}</p>
                 <p><strong>Location:</strong> {service.location}</p>
-                <p>({service.reviews} Reviews) {service.review_grade}</p>
+                <p>({service.reviews} Reviews) {service.rating}</p>
                 <button
                   className="info-button"
                   onClick={() => handleMoreInfoClick(service.id)}

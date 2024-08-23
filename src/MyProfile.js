@@ -18,6 +18,8 @@ const MyProfile = () => {
     bio: '',
     supplier_category: '',
     reviews: '',
+    rating: '',
+    location: '',
   });
 
   const [loading, setLoading] = useState(true);
@@ -33,7 +35,6 @@ const MyProfile = () => {
         });
         setUserData(response.data[0]);
         setLoading(false);
-        console.log(userData);
       } catch (err) {
         setError('Failed to load user data.');
         setLoading(false);
@@ -69,8 +70,9 @@ const MyProfile = () => {
         <p><strong>Email:</strong> {userData.email}</p>
         <p><strong>Phone:</strong> {userData.phone_number}</p>
         <p><strong>Bio:</strong> {userData.bio}</p>
-        <p><strong>Category:</strong> {userData.supplier_category}</p>
-        <p><strong>Reviews:</strong> {userData.reviews}</p>
+        <p><strong>Category:</strong> {userData.supplier_category === "None" ? "Event Planner" : userData.supplier_category}</p>
+        <p><strong>Location:</strong> {userData.location}</p>
+        <p><strong>Rating: </strong> {userData.rating} ({userData.reviews} Reviews) </p>
         <button className="edit-button" onClick={handleEdit}>Edit Profile</button>
       </div>
     </div>

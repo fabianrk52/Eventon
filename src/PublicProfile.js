@@ -92,7 +92,7 @@ const PublicProfile = () => {
         <p><strong>Phone:</strong> {userData.phone_number}</p>
         <p><strong>Bio:</strong> {userData.bio}</p>
         <p><strong>Category:</strong> {userData.supplier_category}</p>
-        <p><strong>Reviews:</strong> {userData.reviews}</p>
+        <p><strong>Rating: </strong> {userData.rating} ({userData.reviews} Reviews) </p>
         <button onClick={() => setShowContactForm(true)} className="contact-button">
           Contact
         </button>
