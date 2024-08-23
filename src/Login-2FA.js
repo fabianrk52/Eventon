@@ -11,7 +11,7 @@ const LoginTwoFactorAuth = () => {
   const navigate = useNavigate();
 
   const handleVerify = async () => {
-    navigate('/events');
+    navigate('/');
     try {
       const token = Cookies.get('userToken');
       const response = await axios.post('/api/auth/login-2fa', { token, code }, {
@@ -24,7 +24,7 @@ const LoginTwoFactorAuth = () => {
         // 2FA is successful, redirect to the dashboard or events page
         setMessage("Successful Login!");
         Cookies.set('userToken', token, { expires: 7 });
-        navigate('/events');
+        navigate('/');
       } else {
         setMessage('Invalid 2FA code.');
       }
