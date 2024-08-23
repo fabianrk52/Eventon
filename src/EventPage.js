@@ -51,24 +51,25 @@ const EventPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUserEvents = async () => {
-      try {
-        const response = await axios.get('http://localhost:65000/events-with-details', {
-          headers: {
-            Authorization: `Bearer ${Cookies.get('userToken')}`  // Use token from cookies
-          }
-        });
-        setEvents(response.data);
-        console.log(response.data);
-        setLoading(false);
-      } catch (err) {
-        setError('Failed to load events');
-        setLoading(false);
-      }
-    };
     fetchUserEvents();
     setNeedRefresh(false)
   }, [needRefresh]);
+
+  const fetchUserEvents = async () => {
+    try {
+      const response = await axios.get('http://localhost:65000/events-with-details', {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('userToken')}`  // Use token from cookies
+        }
+      });
+      setEvents(response.data);
+      console.log(response.data);
+      setLoading(false);
+    } catch (err) {
+      setError('Failed to load events');
+      setLoading(false);
+    }
+  };
 
   const createNewEvent = async () => {
     setNeedRefresh(true);
@@ -176,6 +177,7 @@ const EventPage = () => {
       if (response.status === 200) {
         setEvents(events.filter(event => event.id !== selectedEvent.id));
         setSelectedEvent(events[0] || null); // Select the first event or null if none are left
+        await fetchUserEvents();
       }
     } catch (error) {
       console.error('Error deleting the event:', error);
