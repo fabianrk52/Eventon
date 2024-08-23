@@ -199,16 +199,10 @@ const EventPage = () => {
             Authorization: `Bearer ${Cookies.get('userToken')}`, // Use token from cookies
           },
         });
-
-        updatedGuests = [...selectedEvent.guests, response.data];
       }
-
       if (response.status === 200 || response.status === 201) {
+        alert(response.data.message)
         await fetchUpdatedEvent(selectedEvent.id);
-
-        const updatedEvent = { ...selectedEvent, guests: updatedGuests };
-        setEvents(events.map(event => event.id === selectedEvent.id ? updatedEvent : event));
-        setSelectedEvent(updatedEvent);
         handleCancelEditing();
       }
     } catch (error) {
@@ -265,17 +259,11 @@ const EventPage = () => {
             Authorization: `Bearer ${Cookies.get('userToken')}`,  // Use token from cookies
           },
         });
-        console.log(newTask);
-
-        updatedTasks = [...selectedEvent.tasks, response.data];
       }
 
       if (response.status === 200 || response.status === 201) {
+        alert(response.data.message)
         await fetchUpdatedEvent(selectedEvent.id);
-
-        const updatedEvent = { ...selectedEvent, tasks: updatedTasks };
-        setEvents(events.map(event => event.id === selectedEvent.id ? updatedEvent : event));
-        setSelectedEvent(updatedEvent);
         handleCancelEditing();
       }
     } catch (error) {
@@ -344,6 +332,7 @@ const EventPage = () => {
           {events.map((event, index) => (
             <li key={index} onClick={() => handleEventSelection(event)}>
               {event.title}
+              {console.log(event)}
             </li>
           ))}
         </ul>
