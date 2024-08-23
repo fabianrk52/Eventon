@@ -46,6 +46,7 @@ const EventPage = () => {
   const [newTeammate, setNewTeammate] = useState('');  // New state for teammate
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [needRefresh, setNeedRefresh] = useState(false);
 
   const navigate = useNavigate();
 
@@ -66,8 +67,13 @@ const EventPage = () => {
       }
     };
     fetchUserEvents();
-  }, []);
+    setNeedRefresh(false)
+  }, [needRefresh]);
 
+  const createNewEvent = async () => {
+    setNeedRefresh(true);
+    handleCancelNewEvent();
+  }
   const handleCreateNewEvent = () => {
     setShowNewEventForm(true); // Show the New Event form when button is clicked
   };
@@ -259,6 +265,7 @@ const EventPage = () => {
             Authorization: `Bearer ${Cookies.get('userToken')}`,  // Use token from cookies
           },
         });
+        console.log(newTask);
       }
 
       if (response.status === 200 || response.status === 201) {
@@ -338,7 +345,7 @@ const EventPage = () => {
         </ul>
         <button onClick={handleCreateNewEvent} className="create-event-button">Create New Event</button>
       </div>
-      {showNewEventForm ? (<NewEvent onCancel={handleCancelNewEvent} />
+      {showNewEventForm ? (<NewEvent onCancel={handleCancelNewEvent} createEvent={createNewEvent} />
       ) : (
         <>
           <div className="event-details">

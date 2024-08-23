@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import './NewEvent.css';
 
-const NewEvent = () => {
+const NewEvent = ({ createEvent }) => {
     const [title, setTitle] = useState('');
     const [date, setDate] = useState('');
     const [location, setLocation] = useState('');
@@ -13,13 +13,12 @@ const NewEvent = () => {
     const [status, setStatus] = useState('Planned');
     const [numGuests, setNumGuests] = useState('');
     const [teammate, setTeammate] = useState('');
-
-    const navigate = useNavigate();
+    const [isSent, setIsSent] = useState("");
 
     const handleCreateEvent = async (e) => {
         e.preventDefault();
-
         try {
+            console.log()
             const response = await axios.post('http://localhost:65000/add_event', {
                 title,
                 date,
@@ -36,13 +35,15 @@ const NewEvent = () => {
             });
 
             if (response.status === 201) {
-                alert('Event created successfully!');
-                navigate('/events');  // Redirect to events page
+                alert(response.data.message);
+                setIsSent(true);
             }
         } catch (error) {
             console.error('Error creating event:', error);
             alert('Failed to create event. Please try again.');
+            setIsSent(true);
         }
+        createEvent(isSent);
     };
 
     return (
