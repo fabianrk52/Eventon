@@ -47,7 +47,7 @@ const ServicesPage = () => {
       (category === '' || service.supplier_category === category) &&
       (locationFilter === '' || service.location === locationFilter) &&
       (rating === '' || service.rating >= parseFloat(rating)) &&
-      (searchTerm === '' || service.title.toLowerCase().includes(searchTerm.toLowerCase())) // Filtering by search term
+      (searchTerm === '' || service.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||  service.last_name.toLowerCase().includes(searchTerm.toLowerCase())) // Filtering by search term
     );
   });
 
@@ -63,7 +63,7 @@ const ServicesPage = () => {
                 <h3>{service.first_name + " " + service.last_name}</h3>
                 <p><strong>Category:</strong> {service.supplier_category}</p>
                 <p><strong>Location:</strong> {service.location}</p>
-                <p>({service.reviews} Reviews) {service.rating}</p>
+                <p>{service.rating}★ ({service.reviews} Reviews) </p>
                 <button
                   className="info-button"
                   onClick={() => handleMoreInfoClick(service.id)}
