@@ -7,8 +7,8 @@ const EditProfile = () => {
   const userID = Cookies.get('userId');
 
   const [formData, setFormData] = useState({
-    coverPhoto: '',
-    profilePhoto: '',
+    cover_image: '',
+    profile_image: '',
     last_name: '',
     email: '',
     phone_number: '',
@@ -37,8 +37,8 @@ const EditProfile = () => {
         });
         const userData = response.data[0];
         setFormData({
-          coverPhoto: userData.coverPhoto || '',
-          profilePhoto: userData.profilePhoto || '',
+          cover_image: userData.cover_image || '',
+          profile_image: userData.profile_image || '',
           first_name: userData.first_name || '',
           last_name: userData.last_name || '',
           email: userData.email || '',
@@ -57,14 +57,56 @@ const EditProfile = () => {
     fetchUserData();
   }, [userID]);
 
-  const handleFileChange = (e) => {
-    const { name, files } = e.target;
-    const file = files[0];
-    // Handle file upload logic here (e.g., preview, uploading to server, etc.)
-    setFormData({
-      ...formData,
-      [name]: URL.createObjectURL(file), // Preview the image locally
-    });
+  const handleProfileImageUpload = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('image', file);
+  
+    try {
+      const response = await axios.post(`http://localhost:65000/upload-image/${userID}/profile`, formData, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('userToken')}`,
+          'Content-Type': 'multipart/form-data'  // Important for file uploads
+        }
+      });
+  
+      const base64Image = response.data.base64Image;
+      alert('Profile image uploaded successfully');
+  
+      // Update the state with the uploaded profile image
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        profile_image: base64Image,
+      }));
+    } catch (error) {
+      alert('Error uploading profile image');
+    }
+  };
+  
+  const handleCoverImageUpload = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('image', file);
+  
+    try {
+      const response = await axios.post(`http://localhost:65000/upload-image/${userID}/cover`, formData, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('userToken')}`,
+          'Content-Type': 'multipart/form-data'  // Important for file uploads
+        }
+      });
+  
+      const base64Image = response.data.base64Image;
+      alert('Cover image uploaded successfully');
+  
+      // Update the state with the uploaded cover image
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        cover_image: base64Image,
+      }));
+    } catch (error) {
+      alert('Error uploading cover image');
+    }
   };
 
   const handleChange = (e) => {
@@ -77,7 +119,16 @@ const EditProfile = () => {
 
   const handleSave = async () => {
     try {
-      await axios.put(`http://localhost:65000/user-profile/${userID}`, formData, {
+      const profileData = {
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        email: formData.email,
+        phone_number: formData.phone_number,
+        bio: formData.bio,
+        supplier_category: formData.supplier_category,
+      };
+
+      await axios.put(`http://localhost:65000/user-profile/${userID}`, profileData, {
         headers: {
           Authorization: `Bearer ${Cookies.get('userToken')}`
         }
@@ -87,6 +138,7 @@ const EditProfile = () => {
       alert('Failed to update profile.');
     }
   };
+
 
   // if (loading) {
   //   return <p>Loading...</p>;
@@ -99,7 +151,7 @@ const EditProfile = () => {
   return (
     <div className="edit-profile-container">
       <div className="cover-photo-container">
-        <img src={formData.coverPhoto} alt="Cover" className="cover-photo" />
+        <img src={`data:image/jpeg;base64,${formData.cover_image}`} alt="Cover" className="cover-photo" />
         <div className="upload-icon cover-upload">
           <label htmlFor="coverPhotoUpload">
             <i class="fa-solid fa-upload"></i>
@@ -107,14 +159,14 @@ const EditProfile = () => {
           <input
             type="file"
             id="coverPhotoUpload"
-            name="coverPhoto"
+            name="cover_image"
             accept="image/*"
-            onChange={handleFileChange}
+            onChange={handleCoverImageUpload}
           />
         </div>
       </div>
       <div className="profile-photo-container">
-        <img src={formData.profilePhoto} alt="Profile" className="profile-photo" />
+        <img src={`data:image/jpeg;base64,${formData.profile_image}`} alt="Profile" className="profile-photo" />
         <div className="upload-icon profile-upload">
           <label htmlFor="profilePhotoUpload">
             <i class="fa-solid fa-upload"></i>
@@ -122,9 +174,9 @@ const EditProfile = () => {
           <input
             type="file"
             id="profilePhotoUpload"
-            name="profilePhoto"
+            name="profile_image"
             accept="image/*"
-            onChange={handleFileChange}
+            onChange={handleProfileImageUpload}
           />
         </div>
       </div>

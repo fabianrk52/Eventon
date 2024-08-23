@@ -9,8 +9,8 @@ const MyProfile = () => {
   const navigate = useNavigate();
 
   const [userData, setUserData] = useState({
-    coverPhoto: '',
-    profilePhoto: '',
+    cover_image: '',
+    profile_image: '',  // Ensure this matches the field from the backend
     first_name: '',
     last_name: '',
     email: '',
@@ -19,7 +19,7 @@ const MyProfile = () => {
     supplier_category: '',
     reviews: '',
   });
-  console.log(userData);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -33,10 +33,12 @@ const MyProfile = () => {
         });
         setUserData(response.data[0]);
         setLoading(false);
+        console.log(userData);
       } catch (err) {
         setError('Failed to load user data.');
         setLoading(false);
       }
+
     };
 
     fetchUserData();
@@ -46,21 +48,29 @@ const MyProfile = () => {
     navigate(`/edit-profile`); // Navigate to the EditProfile page
   };
 
-  //   if (loading) {
-  //     return <p>Loading...</p>;
-  //   }
+  // if (loading) {
+  //   return <p>Loading...</p>;
+  // }
 
-  //   if (error) {
-  //     return <p>{error}</p>;
-  //   }
+  // if (error) {
+  //   return <p>{error}</p>;
+  // }
 
   return (
     <div className="my-profile-container">
       <div className="cover-photo-container">
-        <img src={userData.coverPhoto} alt="Cover" className="cover-photo" />
+        {userData.cover_image ? (
+          <img src={`data:image/jpeg;base64,${userData.cover_image}`} alt="Cover" className="cover-photo" />
+        ) : (
+          <div className="placeholder">No Cover Photo</div>
+        )}
       </div>
       <div className="profile-photo-container">
-        <img src={userData.profilePhoto} alt="Profile" className="profile-photo" />
+        {userData.profile_image ? (
+          <img src={`data:image/jpeg;base64,${userData.profile_image}`} alt="Profile" className="profile-photo" />
+        ) : (
+          <div className="placeholder">No Profile Photo</div>
+        )}
       </div>
       <div className="personal-info-container">
         <h2>{userData.first_name} {userData.last_name}</h2>
@@ -69,10 +79,11 @@ const MyProfile = () => {
         <p><strong>Bio:</strong> {userData.bio}</p>
         <p><strong>Category:</strong> {userData.supplier_category}</p>
         <p><strong>Reviews:</strong> {userData.reviews}</p>
-        <button className="edit-button" onClick={handleEdit}>Edit Profile</button> {/* Edit button */}
+        <button className="edit-button" onClick={handleEdit}>Edit Profile</button>
       </div>
     </div>
   );
+
 };
 
 export default MyProfile;

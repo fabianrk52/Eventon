@@ -9,8 +9,8 @@ import Cookies from 'js-cookie';
 const PublicProfile = () => {
   const { id } = useParams();
   const [userData, setUserData] = useState({
-    coverPhoto: '',
-    profilePhoto: '',
+    cover_image: '',
+    profile_image: '',
     first_name: '',
     last_name: '',
     email: '',
@@ -72,10 +72,18 @@ const PublicProfile = () => {
   return (
     <div className="public-profile-container">
       <div className="cover-photo-container">
-        <img src={userData.coverPhoto} alt="Cover" className="cover-photo" />
+        {userData.cover_image ? (
+          <img src={`data:image/jpeg;base64,${userData.cover_image}`} alt="Cover" className="cover-photo" />
+        ) : (
+          <div className="placeholder">No Cover Photo</div>
+        )}
       </div>
       <div className="profile-photo-container">
-        <img src={userData.profilePhoto} alt="Profile" className="profile-photo" />
+        {userData.profile_image ? (
+          <img src={`data:image/jpeg;base64,${userData.profile_image}`} alt="Profile" className="profile-photo" />
+        ) : (
+          <div className="placeholder">No Profile Photo</div>
+        )}
       </div>
       <div className="personal-info-container">
         <h2>{userData.first_name} {userData.last_name}</h2>
