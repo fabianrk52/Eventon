@@ -137,7 +137,7 @@ const Signup = () => {
           <i class="fa-brands fa-facebook fa-xl"></i>
           <i class="fa-brands fa-google google fa-xl"></i>
         </div>
-        <p>Already have an account? <Link to="/" className="login-link">Login</Link></p>
+        <p>Already have an account? <Link to="/login" className="login-link">Login</Link></p>
       </div>
     </div>
   );
