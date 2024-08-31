@@ -94,6 +94,8 @@ const ServicesPage = () => {
           <option value="Tel Aviv">Tel Aviv</option>
           <option value="Jerusalem">Jerusalem</option>
           <option value="Haifa">Haifa</option>
+          <option value="Beer Sheva">Beer Sheva</option>
+          <option value="Ness Ziona">Ness Ziona</option>
         </select>
 
         <h4>Rating</h4>
